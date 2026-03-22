@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["Marcel Liguili <121775091+MLiguili@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+fastapi = "^0.115.0"
+uvicorn = "^0.34.0"
+sqlalchemy = "^2.0.38"
+aiosqlite = "^0.21.0"
+pydantic = {extras = ["email"], version = "^2.8.0"}
+pydantic-settings = "^2.8.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.20"
+alembic = "^1.14.0"
+fpdf2 = "^2.8.7"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.5"
+pytest-cov = "^6.0.0"
+httpx = "^0.27.0"
+ruff = "^0.9.0"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+fail_under = 50
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/models/pedido.py" = ["F821"]
+
+[build-system]
+
+
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
