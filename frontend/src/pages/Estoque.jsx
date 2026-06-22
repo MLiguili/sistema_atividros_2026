@@ -426,7 +426,7 @@ function ModalFormulario({ tipo, item, onSalvar, onFechar, erro }) {
           )}
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-glass" onClick={onFechar}>Cancelar</button>
+            <button type="button" className="btn btn-secondary" onClick={onFechar}>Cancelar</button>
             <button type="submit" className="btn btn-primary"><Save size={18} /> Salvar</button>
           </div>
         </form>
@@ -448,7 +448,7 @@ function ModalConfirmacao({ item, onConfirmar, onCancelar }) {
             Tem certeza que deseja excluir <strong>{nomeItem}</strong>? Esta ação não pode ser desfeita.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-glass" onClick={onCancelar}>Cancelar</button>
+            <button className="btn btn-secondary" onClick={onCancelar}>Cancelar</button>
             <button className="btn" style={{ background: 'var(--danger)', color: 'white' }} onClick={onConfirmar}>
               <Trash2 size={18} /> Excluir
             </button>

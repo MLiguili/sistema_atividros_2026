@@ -214,7 +214,7 @@ const Pedidos = () => {
             <button className="btn btn-primary" onClick={() => baixarPDF(criado.id)}>
               <FileText size={20} /> Baixar PDF
             </button>
-            <button className="btn btn-glass" onClick={() => { setCriado(null); setMostrarFormulario(false); }}>
+            <button className="btn btn-secondary" onClick={() => { setCriado(null); setMostrarFormulario(false); }}>
               Ver Pedidos
             </button>
           </div>
@@ -266,7 +266,7 @@ const Pedidos = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button className="btn btn-glass" onClick={() => setModalSinal(null)}>
+            <button className="btn btn-secondary" onClick={() => setModalSinal(null)}>
               Cancelar
             </button>
             <button
@@ -379,7 +379,7 @@ const Pedidos = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button className="btn btn-glass" onClick={() => setModalNovoCliente(false)}>
+            <button className="btn btn-secondary" onClick={() => setModalNovoCliente(false)}>
               Cancelar
             </button>
             <button className="btn btn-primary" onClick={criarCliente}>
@@ -427,7 +427,7 @@ const Pedidos = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button className="btn btn-glass" onClick={() => setModalBaixaEstoque(null)}>
+            <button className="btn btn-secondary" onClick={() => setModalBaixaEstoque(null)}>
               Cancelar
             </button>
             <button className="btn btn-primary" onClick={confirmarBaixaEstoque}>
@@ -449,7 +449,7 @@ const Pedidos = () => {
               {pedidoDetalhe.cliente?.nome} {pedidoDetalhe.cliente?.sobrenome}
             </p>
           </div>
-          <button className="btn btn-glass" onClick={() => setPedidoDetalhe(null)}>
+          <button className="btn btn-secondary" onClick={() => setPedidoDetalhe(null)}>
             <X size={20} /> Fechar
           </button>
         </div>
@@ -553,16 +553,16 @@ const Pedidos = () => {
                   </button>
                 )}
                 {pedidoDetalhe.status_financeiro === 'sem_pagamento' && (
-                  <button className="btn btn-glass" onClick={() => setModalSinal({ pedidoId: pedidoDetalhe.id, valorTotal: parseFloat(pedidoDetalhe.valor_total), valorSinal: '' })}>
+                  <button className="btn btn-secondary" onClick={() => setModalSinal({ pedidoId: pedidoDetalhe.id, valorTotal: parseFloat(pedidoDetalhe.valor_total), valorSinal: '' })}>
                     Receber Sinal
                   </button>
                 )}
                 {pedidoDetalhe.status_financeiro === 'sinal_recebido' && (
-                  <button className="btn btn-glass" onClick={() => atualizarStatus(pedidoDetalhe.id, 'financeiro', 'pago_total')}>
+                  <button className="btn btn-secondary" onClick={() => atualizarStatus(pedidoDetalhe.id, 'financeiro', 'pago_total')}>
                     Quitar
                   </button>
                 )}
-                <button className="btn btn-glass" onClick={() => baixarPDF(pedidoDetalhe.id)}>
+                <button className="btn btn-secondary" onClick={() => baixarPDF(pedidoDetalhe.id)}>
                   <FileText size={18} /> Baixar PDF
                 </button>
                 <div style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--glass-border)' }}>
@@ -626,7 +626,7 @@ const Pedidos = () => {
       <div className="pedidos-page fade-in">
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <h1>Novo Pedido</h1>
-          <button className="btn btn-glass" onClick={() => setMostrarFormulario(false)}>
+          <button className="btn btn-secondary" onClick={() => setMostrarFormulario(false)}>
             Cancelar
           </button>
         </header>
@@ -646,7 +646,7 @@ const Pedidos = () => {
                 ))}
               </select>
             </div>
-            <button className="btn btn-glass" onClick={() => setModalNovoCliente(true)} title="Novo Cliente">
+            <button className="btn btn-secondary" onClick={() => setModalNovoCliente(true)} title="Novo Cliente">
               <UserPlus size={20} /> Novo Cliente
             </button>
           </div>
@@ -719,7 +719,7 @@ const Pedidos = () => {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem' }}>
-          <button className="btn btn-glass" onClick={adicionarItem}>
+          <button className="btn btn-secondary" onClick={adicionarItem}>
             <Plus size={20} /> Adicionar Item
           </button>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -797,14 +797,14 @@ const Pedidos = () => {
         <h1>Pedidos</h1>
         <div className="page-header-actions">
           <button 
-            className={`btn ${visualizacao === 'kanban' ? 'btn-primary' : 'btn-glass'}`}
+            className={`btn ${visualizacao === 'kanban' ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => setVisualizacao('kanban')}
             title="Kanban"
           >
             <LayoutGrid size={20} />
           </button>
           <button 
-            className={`btn ${visualizacao === 'lista' ? 'btn-primary' : 'btn-glass'}`}
+            className={`btn ${visualizacao === 'lista' ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => setVisualizacao('lista')}
             title="Lista"
           >

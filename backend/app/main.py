@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import autenticacao, calculadora, clientes, estoque, pedidos
+from app.api import autenticacao, calculadora, clientes, compra, estoque, financeiro, pedidos, producao
 
 app = FastAPI(
     title="Sistema Atividros",
@@ -14,6 +14,9 @@ app.include_router(estoque.router)
 app.include_router(clientes.router)
 app.include_router(pedidos.router)
 app.include_router(calculadora.router)
+app.include_router(producao.router)
+app.include_router(compra.router)
+app.include_router(financeiro.router)
 
 
 

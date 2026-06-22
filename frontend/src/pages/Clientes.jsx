@@ -150,7 +150,7 @@ const Clientes = () => {
 
               <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Cliente desde: {new Date(c.criado_em).toLocaleDateString('pt-BR')}</span>
-                <button className="btn btn-glass" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => abrirHistorico(c)}>
+                <button className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => abrirHistorico(c)}>
                   <History size={14} /> Historico
                 </button>
               </div>
@@ -255,7 +255,7 @@ function ModalCliente({ cliente, onSalvar, onFechar, erro }) {
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-glass" onClick={onFechar}>Cancelar</button>
+            <button type="button" className="btn btn-secondary" onClick={onFechar}>Cancelar</button>
             <button type="submit" className="btn btn-primary"><Save size={18} /> Salvar</button>
           </div>
         </form>
@@ -275,7 +275,7 @@ function ModalConfirmacao({ cliente, onConfirmar, onCancelar }) {
             Tem certeza que deseja excluir <strong>{cliente.nome} {cliente.sobrenome}</strong>? Esta ação não pode ser desfeita.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-glass" onClick={onCancelar}>Cancelar</button>
+            <button className="btn btn-secondary" onClick={onCancelar}>Cancelar</button>
             <button className="btn" style={{ background: 'var(--danger)', color: 'white' }} onClick={onConfirmar}>
               <Trash2 size={18} /> Excluir
             </button>
@@ -370,7 +370,7 @@ function ModalHistorico({ cliente, pedidos, onFechar }) {
         )}
 
         <div className="modal-footer">
-          <button className="btn btn-glass" onClick={onFechar}>Fechar</button>
+          <button className="btn btn-secondary" onClick={onFechar}>Fechar</button>
         </div>
       </div>
     </div>

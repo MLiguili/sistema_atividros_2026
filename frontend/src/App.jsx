@@ -5,7 +5,9 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Estoque from './pages/Estoque';
 import Clientes from './pages/Clientes';
-import Pedidos from './pages/Pedidos';
+import Compras from './pages/Compras';
+import Financeiro from './pages/Financeiro';
+import Producao from './pages/Producao';
 import Calculadora from './pages/Calculadora';
 
 const Login = () => {
@@ -53,9 +55,10 @@ function App() {
           <Route path="/" element={<RotaProtegida><Layout><Dashboard /></Layout></RotaProtegida>} />
           <Route path="/estoque" element={<RotaProtegida><Layout><Estoque /></Layout></RotaProtegida>} />
           <Route path="/clientes" element={<RotaProtegida><Layout><Clientes /></Layout></RotaProtegida>} />
-          <Route path="/pedidos" element={<RotaProtegida><Layout><Pedidos /></Layout></RotaProtegida>} />
+          <Route path="/producao" element={<RotaProtegida><Layout><Producao /></Layout></RotaProtegida>} />
+          <Route path="/compras" element={<RotaProtegida><Layout><Compras /></Layout></RotaProtegida>} />
+          <Route path="/financeiro" element={<RotaProtegida><Layout><Financeiro /></Layout></RotaProtegida>} />
           <Route path="/calculadora" element={<RotaProtegida><Layout><Calculadora /></Layout></RotaProtegida>} />
-          {/* Rotas futuras: Estoque, Pedidos, etc. */}
         </Routes>
       </Router>
     </ProvedorAutenticacao>

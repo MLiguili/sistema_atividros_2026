@@ -19,6 +19,8 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.20"
 alembic = "^1.14.0"
 fpdf2 = "^2.8.7"
+asyncpg = "^0.30.0"
+python-barcode = "^0.16.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,5 +1,5 @@
 import enum
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -49,8 +49,8 @@ class Pedido(Base):
     endereco_entrega: Mapped[str | None] = mapped_column(String(255), nullable=True)
     frete: Mapped[float] = mapped_column(Numeric(10, 2), default=0.0)
 
-    criado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
-    atualizado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
+    criado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
+    atualizado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     cliente: Mapped["Cliente"] = relationship("Cliente")
     itens: Mapped[list["ItemPedido"]] = relationship("ItemPedido", back_populates="pedido", cascade="all, delete-orphan")
@@ -96,6 +96,6 @@ class PedidoEvento(Base):
     status_anterior: Mapped[str | None] = mapped_column(String(50), nullable=True)
     status_novo: Mapped[str] = mapped_column(String(50), nullable=False)
     observacao: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    criado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
+    criado_em: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
     pedido: Mapped["Pedido"] = relationship("Pedido", back_populates="eventos")

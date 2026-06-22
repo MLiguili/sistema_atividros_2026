@@ -1,0 +1,841 @@
+INFO:     127.0.0.1:62603 - "GET / HTTP/1.1" 200 OK
+2026-06-21 23:30:28,308 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,340 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,341 INFO sqlalchemy.engine.Engine [generated in 0.00114s] ('admin',)
+INFO:     127.0.0.1:62608 - "POST /autenticacao/entrar HTTP/1.1" 200 OK
+2026-06-21 23:30:28,369 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62610 - "GET / HTTP/1.1" 200 OK
+2026-06-21 23:30:28,660 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,661 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,661 INFO sqlalchemy.engine.Engine [cached since 0.3216s ago] ('admin',)
+2026-06-21 23:30:28,666 INFO sqlalchemy.engine.Engine INSERT INTO clientes (nome, sobrenome, telefone, email, endereco, cep, criado_em) VALUES (?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:30:28,666 INFO sqlalchemy.engine.Engine [generated in 0.00052s] ('Marcel', 'Liguili', '(11) 99999-8888', 'marcel@email.com', 'Rua Exemplo, 123', '01234-567', '2026-06-22 02:30:28.666162')
+2026-06-21 23:30:28,669 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-21 23:30:28,675 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,678 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes 
+WHERE clientes.id = ?
+2026-06-21 23:30:28,678 INFO sqlalchemy.engine.Engine [generated in 0.00061s] (1,)
+INFO:     127.0.0.1:62610 - "POST /clientes/ HTTP/1.1" 201 Created
+2026-06-21 23:30:28,682 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,687 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,688 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,688 INFO sqlalchemy.engine.Engine [cached since 0.348s ago] ('admin',)
+2026-06-21 23:30:28,690 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:30:28,691 INFO sqlalchemy.engine.Engine [generated in 0.00053s] ()
+INFO:     127.0.0.1:62610 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:30:28,694 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,702 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,702 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,703 INFO sqlalchemy.engine.Engine [cached since 0.3628s ago] ('admin',)
+2026-06-21 23:30:28,705 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras 
+WHERE molduras.codigo = ?
+2026-06-21 23:30:28,705 INFO sqlalchemy.engine.Engine [generated in 0.00033s] ('MDR-001',)
+2026-06-21 23:30:28,708 INFO sqlalchemy.engine.Engine INSERT INTO molduras (codigo, quantidade, preco_venda, preco_custo, cor, tamanho_barra, largura_barra, marca) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:30:28,708 INFO sqlalchemy.engine.Engine [generated in 0.00039s] ('MDR-001', 50, 45.9, 22.5, 'Preto Fosco', 2.5, 3.0, 'Marca Exemplo')
+2026-06-21 23:30:28,712 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-21 23:30:28,717 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,720 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras 
+WHERE molduras.id = ?
+2026-06-21 23:30:28,720 INFO sqlalchemy.engine.Engine [generated in 0.00072s] (1,)
+INFO:     127.0.0.1:62610 - "POST /estoque/molduras HTTP/1.1" 201 Created
+2026-06-21 23:30:28,724 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,731 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,732 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,732 INFO sqlalchemy.engine.Engine [cached since 0.3924s ago] ('admin',)
+2026-06-21 23:30:28,735 INFO sqlalchemy.engine.Engine INSERT INTO pedidos (cliente_id, numero_pedido, status_geral, status_producao, status_financeiro, valor_total, valor_sinal, saldo_devedor, endereco_entrega, frete, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:30:28,736 INFO sqlalchemy.engine.Engine [generated in 0.00051s] (1, '202600001', 'rascunho', 'pendente', 'sem_pagamento', 0.0, 20.0, 0.0, 'Rua Exemplo, 123', 15.0, '2026-06-22 02:30:28.735664', '2026-06-22 02:30:28.735668')
+2026-06-21 23:30:28,741 INFO sqlalchemy.engine.Engine UPDATE pedidos SET valor_total=?, saldo_devedor=?, atualizado_em=? WHERE pedidos.id = ?
+2026-06-21 23:30:28,741 INFO sqlalchemy.engine.Engine [generated in 0.00052s] (45.9, 25.9, '2026-06-22 02:30:28.741027', 1)
+2026-06-21 23:30:28,743 INFO sqlalchemy.engine.Engine INSERT INTO itens_pedido (pedido_id, descricao, quantidade, preco_unitario, subtotal, moldura_id, vidro_id, fundo_id, largura, altura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:30:28,743 INFO sqlalchemy.engine.Engine [generated in 0.00038s] (1, 'Quadro 50x70cm', 1, 45.9, 45.9, 1, None, None, 50.0, 70.0)
+2026-06-21 23:30:28,745 INFO sqlalchemy.engine.Engine INSERT INTO pedidos_eventos (pedido_id, eixo, status_anterior, status_novo, observacao, criado_em) VALUES (?, ?, ?, ?, ?, ?)
+2026-06-21 23:30:28,746 INFO sqlalchemy.engine.Engine [generated in 0.00047s] (1, 'geral', None, 'rascunho', 'Pedido criado', '2026-06-22 02:30:28.745751')
+2026-06-21 23:30:28,748 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-21 23:30:28,753 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,756 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos 
+WHERE pedidos.id = ?
+2026-06-21 23:30:28,756 INFO sqlalchemy.engine.Engine [generated in 0.00046s] (1,)
+2026-06-21 23:30:28,761 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:30:28,762 INFO sqlalchemy.engine.Engine [generated in 0.00062s] (1,)
+2026-06-21 23:30:28,768 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:30:28,768 INFO sqlalchemy.engine.Engine [generated in 0.00058s] (1,)
+INFO:     127.0.0.1:62610 - "POST /pedidos/ HTTP/1.1" 201 Created
+2026-06-21 23:30:28,771 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,778 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,779 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,779 INFO sqlalchemy.engine.Engine [cached since 0.4395s ago] ('admin',)
+2026-06-21 23:30:28,783 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:30:28,783 INFO sqlalchemy.engine.Engine [generated in 0.00062s] ()
+2026-06-21 23:30:28,786 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:30:28,786 INFO sqlalchemy.engine.Engine [cached since 0.02519s ago] (1,)
+2026-06-21 23:30:28,788 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:30:28,789 INFO sqlalchemy.engine.Engine [cached since 0.02116s ago] (1,)
+INFO:     127.0.0.1:62610 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:30:28,792 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,799 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,799 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:30:28,799 INFO sqlalchemy.engine.Engine [cached since 0.4594s ago] ('admin',)
+2026-06-21 23:30:28,801 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos 
+WHERE pedidos.id = ?
+2026-06-21 23:30:28,801 INFO sqlalchemy.engine.Engine [cached since 0.04532s ago] (1,)
+2026-06-21 23:30:28,803 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:30:28,803 INFO sqlalchemy.engine.Engine [cached since 0.04176s ago] (1,)
+2026-06-21 23:30:28,804 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:30:28,804 INFO sqlalchemy.engine.Engine [cached since 0.03683s ago] (1,)
+INFO:     127.0.0.1:62610 - "GET /pedidos/1 HTTP/1.1" 200 OK
+2026-06-21 23:30:28,806 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:30:28,812 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:30:28,814 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:30:28,815 INFO sqlalchemy.engine.Engine [generated in 0.00076s] ()
+INFO:     127.0.0.1:62610 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:30:28,817 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:04,816 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,816 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:04,817 INFO sqlalchemy.engine.Engine [cached since 36.48s ago] ('admin',)
+INFO:     127.0.0.1:62618 - "POST /autenticacao/entrar HTTP/1.1" 200 OK
+2026-06-21 23:31:04,831 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62618 - "OPTIONS /autenticacao/me HTTP/1.1" 200 OK
+2026-06-21 23:31:04,840 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,840 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:04,840 INFO sqlalchemy.engine.Engine [cached since 36.5s ago] ('admin',)
+INFO:     127.0.0.1:62618 - "GET /autenticacao/me HTTP/1.1" 200 OK
+2026-06-21 23:31:04,843 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62618 - "OPTIONS /estoque/molduras HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62618 - "OPTIONS /estoque/vidros HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62618 - "OPTIONS /estoque/fundos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62618 - "OPTIONS /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:31:04,902 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,902 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:04,903 INFO sqlalchemy.engine.Engine [cached since 36.09s ago] ()
+INFO:     127.0.0.1:62618 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:04,906 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62618 - "OPTIONS /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:04,910 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,912 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:31:04,913 INFO sqlalchemy.engine.Engine [generated in 0.00100s] ()
+INFO:     127.0.0.1:62618 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:31:04,915 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:04,918 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,919 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:31:04,920 INFO sqlalchemy.engine.Engine [generated in 0.00043s] ()
+INFO:     127.0.0.1:62618 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:31:04,922 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:04,924 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,925 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:04,925 INFO sqlalchemy.engine.Engine [cached since 36.59s ago] ('admin',)
+2026-06-21 23:31:04,927 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:31:04,927 INFO sqlalchemy.engine.Engine [cached since 36.14s ago] ()
+2026-06-21 23:31:04,931 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:04,932 INFO sqlalchemy.engine.Engine [cached since 36.17s ago] (1,)
+2026-06-21 23:31:04,934 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:04,935 INFO sqlalchemy.engine.Engine [cached since 36.17s ago] (1,)
+INFO:     127.0.0.1:62618 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:31:04,937 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:04,940 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:04,940 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:04,941 INFO sqlalchemy.engine.Engine [cached since 36.6s ago] ('admin',)
+2026-06-21 23:31:04,942 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:31:04,942 INFO sqlalchemy.engine.Engine [cached since 36.25s ago] ()
+INFO:     127.0.0.1:62618 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:04,944 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:12,209 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:12,210 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:12,210 INFO sqlalchemy.engine.Engine [cached since 43.4s ago] ()
+INFO:     127.0.0.1:62623 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:12,214 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62623 - "OPTIONS /financeiro/resumo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62624 - "OPTIONS /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:31:13,711 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:13,711 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:13,712 INFO sqlalchemy.engine.Engine [cached since 45.37s ago] ('admin',)
+2026-06-21 23:31:13,722 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_receber.valor), ?) AS coalesce_1, coalesce(sum(contas_receber.valor_recebido), ?) AS coalesce_3 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?)
+2026-06-21 23:31:13,722 INFO sqlalchemy.engine.Engine [generated in 0.00088s] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:31:13,724 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:13,725 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:13,726 INFO sqlalchemy.engine.Engine [cached since 45.39s ago] ('admin',)
+2026-06-21 23:31:13,731 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_pagar.valor), ?) AS coalesce_1, coalesce(sum(contas_pagar.valor_pago), ?) AS coalesce_3 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?)
+2026-06-21 23:31:13,732 INFO sqlalchemy.engine.Engine [generated in 0.00085s] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:31:13,737 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber ORDER BY contas_receber.data_vencimento ASC
+2026-06-21 23:31:13,737 INFO sqlalchemy.engine.Engine [generated in 0.00052s] ()
+2026-06-21 23:31:13,741 INFO sqlalchemy.engine.Engine SELECT count(contas_receber.id) AS count_1 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?) AND contas_receber.data_vencimento < ?
+2026-06-21 23:31:13,742 INFO sqlalchemy.engine.Engine [generated in 0.00064s] ('pendente', 'parcial', '2026-06-21')
+INFO:     127.0.0.1:62624 - "GET /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:31:13,745 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:13,750 INFO sqlalchemy.engine.Engine SELECT count(contas_pagar.id) AS count_1 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?) AND contas_pagar.data_vencimento < ?
+2026-06-21 23:31:13,750 INFO sqlalchemy.engine.Engine [generated in 0.00074s] ('pendente', 'parcial', '2026-06-21')
+INFO:     127.0.0.1:62623 - "GET /financeiro/resumo HTTP/1.1" 200 OK
+2026-06-21 23:31:13,753 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:17,551 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:17,551 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:17,552 INFO sqlalchemy.engine.Engine [cached since 48.74s ago] ()
+INFO:     127.0.0.1:62623 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:17,554 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:23,660 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:23,661 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:31:23,661 INFO sqlalchemy.engine.Engine [cached since 18.75s ago] ()
+INFO:     127.0.0.1:62626 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:31:23,664 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:24,968 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:24,969 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:31:24,969 INFO sqlalchemy.engine.Engine [cached since 20.05s ago] ()
+INFO:     127.0.0.1:62626 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:31:24,972 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62626 - "OPTIONS /estoque/suplementos HTTP/1.1" 200 OK
+2026-06-21 23:31:25,939 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:25,942 INFO sqlalchemy.engine.Engine SELECT suplementos.id, suplementos.nome, suplementos.quantidade, suplementos.unidade 
+FROM suplementos
+2026-06-21 23:31:25,942 INFO sqlalchemy.engine.Engine [generated in 0.00041s] ()
+INFO:     127.0.0.1:62626 - "GET /estoque/suplementos HTTP/1.1" 200 OK
+2026-06-21 23:31:25,944 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:27,453 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:27,454 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:27,454 INFO sqlalchemy.engine.Engine [cached since 58.64s ago] ()
+INFO:     127.0.0.1:62626 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:27,456 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:28,834 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:28,835 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:28,835 INFO sqlalchemy.engine.Engine [cached since 60.5s ago] ('admin',)
+2026-06-21 23:31:28,838 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:31:28,838 INFO sqlalchemy.engine.Engine [cached since 60.15s ago] ()
+INFO:     127.0.0.1:62626 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:28,843 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:32,074 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:32,075 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:32,076 INFO sqlalchemy.engine.Engine [cached since 63.74s ago] ('admin',)
+2026-06-21 23:31:32,078 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:32,079 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:32,080 INFO sqlalchemy.engine.Engine [cached since 63.74s ago] ('admin',)
+2026-06-21 23:31:32,088 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:31:32,088 INFO sqlalchemy.engine.Engine [cached since 63.31s ago] ()
+2026-06-21 23:31:32,089 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:32,090 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:32,090 INFO sqlalchemy.engine.Engine [cached since 63.28s ago] ()
+2026-06-21 23:31:32,097 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:31:32,097 INFO sqlalchemy.engine.Engine [cached since 63.41s ago] ()
+2026-06-21 23:31:32,099 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:32,100 INFO sqlalchemy.engine.Engine [cached since 63.34s ago] (1,)
+INFO:     127.0.0.1:62627 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:32,103 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62625 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:32,107 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:32,107 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:31:32,108 INFO sqlalchemy.engine.Engine [cached since 27.2s ago] ()
+2026-06-21 23:31:32,108 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:32,111 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:32,112 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:31:32,113 INFO sqlalchemy.engine.Engine [cached since 27.19s ago] ()
+2026-06-21 23:31:32,115 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:32,116 INFO sqlalchemy.engine.Engine [cached since 63.35s ago] (1,)
+INFO:     127.0.0.1:62627 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:31:32,118 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62626 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:31:32,121 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62625 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:31:32,122 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62625 - "OPTIONS /producao/fila HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62626 - "OPTIONS /producao/resumo HTTP/1.1" 200 OK
+2026-06-21 23:31:35,563 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:35,564 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:35,565 INFO sqlalchemy.engine.Engine [cached since 67.22s ago] ('admin',)
+2026-06-21 23:31:35,567 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:35,568 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:35,568 INFO sqlalchemy.engine.Engine [cached since 67.23s ago] ('admin',)
+2026-06-21 23:31:35,575 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos 
+WHERE pedidos.status_producao IN (?, ?, ?, ?, ?) ORDER BY pedidos.criado_em ASC
+2026-06-21 23:31:35,576 INFO sqlalchemy.engine.Engine [generated in 0.00072s] ('pendente', 'aguardando_material', 'em_producao', 'para_embalar', 'pronto_entrega')
+2026-06-21 23:31:35,577 INFO sqlalchemy.engine.Engine SELECT pedidos.status_producao, count(pedidos.id) AS count_1 
+FROM pedidos GROUP BY pedidos.status_producao
+2026-06-21 23:31:35,578 INFO sqlalchemy.engine.Engine [generated in 0.00057s] ()
+2026-06-21 23:31:35,583 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:35,583 INFO sqlalchemy.engine.Engine [generated in 0.00074s] (1,)
+INFO:     127.0.0.1:62626 - "GET /producao/resumo HTTP/1.1" 200 OK
+2026-06-21 23:31:35,585 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:35,589 INFO sqlalchemy.engine.Engine SELECT clientes.id AS clientes_id, clientes.nome AS clientes_nome, clientes.sobrenome AS clientes_sobrenome, clientes.telefone AS clientes_telefone, clientes.email AS clientes_email, clientes.endereco AS clientes_endereco, clientes.cep AS clientes_cep, clientes.criado_em AS clientes_criado_em 
+FROM clientes 
+WHERE clientes.id IN (?)
+2026-06-21 23:31:35,590 INFO sqlalchemy.engine.Engine [generated in 0.00062s] (1,)
+2026-06-21 23:31:35,594 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:35,594 INFO sqlalchemy.engine.Engine [generated in 0.00061s] (1,)
+INFO:     127.0.0.1:62625 - "GET /producao/fila HTTP/1.1" 200 OK
+2026-06-21 23:31:35,599 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:37,519 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:37,520 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:37,521 INFO sqlalchemy.engine.Engine [cached since 69.18s ago] ('admin',)
+2026-06-21 23:31:37,523 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:37,524 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:37,524 INFO sqlalchemy.engine.Engine [cached since 69.18s ago] ('admin',)
+2026-06-21 23:31:37,526 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:37,527 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:37,528 INFO sqlalchemy.engine.Engine [cached since 68.71s ago] ()
+2026-06-21 23:31:37,535 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:31:37,535 INFO sqlalchemy.engine.Engine [cached since 68.75s ago] ()
+2026-06-21 23:31:37,547 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:37,547 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:31:37,548 INFO sqlalchemy.engine.Engine [cached since 32.64s ago] ()
+INFO:     127.0.0.1:62634 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:37,550 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:37,551 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:31:37,551 INFO sqlalchemy.engine.Engine [cached since 68.86s ago] ()
+2026-06-21 23:31:37,557 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:37,557 INFO sqlalchemy.engine.Engine [cached since 68.8s ago] (1,)
+INFO:     127.0.0.1:62635 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:31:37,559 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:37,559 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:37,560 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:31:37,560 INFO sqlalchemy.engine.Engine [cached since 32.64s ago] ()
+INFO:     127.0.0.1:62626 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:37,563 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:37,565 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:37,565 INFO sqlalchemy.engine.Engine [cached since 68.8s ago] (1,)
+INFO:     127.0.0.1:62634 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:31:37,567 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62625 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:31:37,570 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:39,170 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:39,171 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:39,172 INFO sqlalchemy.engine.Engine [cached since 70.83s ago] ('admin',)
+2026-06-21 23:31:39,175 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:39,175 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:39,176 INFO sqlalchemy.engine.Engine [cached since 70.84s ago] ('admin',)
+2026-06-21 23:31:39,180 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos 
+WHERE pedidos.status_producao IN (?, ?, ?, ?, ?) ORDER BY pedidos.criado_em ASC
+2026-06-21 23:31:39,180 INFO sqlalchemy.engine.Engine [cached since 3.606s ago] ('pendente', 'aguardando_material', 'em_producao', 'para_embalar', 'pronto_entrega')
+2026-06-21 23:31:39,183 INFO sqlalchemy.engine.Engine SELECT pedidos.status_producao, count(pedidos.id) AS count_1 
+FROM pedidos GROUP BY pedidos.status_producao
+2026-06-21 23:31:39,183 INFO sqlalchemy.engine.Engine [cached since 3.606s ago] ()
+INFO:     127.0.0.1:62634 - "GET /producao/resumo HTTP/1.1" 200 OK
+2026-06-21 23:31:39,187 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:39,188 INFO sqlalchemy.engine.Engine [cached since 3.605s ago] (1,)
+2026-06-21 23:31:39,188 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:39,191 INFO sqlalchemy.engine.Engine SELECT clientes.id AS clientes_id, clientes.nome AS clientes_nome, clientes.sobrenome AS clientes_sobrenome, clientes.telefone AS clientes_telefone, clientes.email AS clientes_email, clientes.endereco AS clientes_endereco, clientes.cep AS clientes_cep, clientes.criado_em AS clientes_criado_em 
+FROM clientes 
+WHERE clientes.id IN (?)
+2026-06-21 23:31:39,192 INFO sqlalchemy.engine.Engine [cached since 3.603s ago] (1,)
+2026-06-21 23:31:39,194 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:39,195 INFO sqlalchemy.engine.Engine [cached since 3.601s ago] (1,)
+INFO:     127.0.0.1:62625 - "GET /producao/fila HTTP/1.1" 200 OK
+2026-06-21 23:31:39,199 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:42,707 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:42,709 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:42,709 INFO sqlalchemy.engine.Engine [cached since 74.37s ago] ('admin',)
+2026-06-21 23:31:42,713 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:42,714 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:42,714 INFO sqlalchemy.engine.Engine [cached since 74.37s ago] ('admin',)
+2026-06-21 23:31:42,715 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:42,716 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:31:42,717 INFO sqlalchemy.engine.Engine [cached since 73.9s ago] ()
+2026-06-21 23:31:42,732 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:31:42,733 INFO sqlalchemy.engine.Engine [cached since 74.04s ago] ()
+2026-06-21 23:31:42,734 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:31:42,735 INFO sqlalchemy.engine.Engine [cached since 73.95s ago] ()
+INFO:     127.0.0.1:62637 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:31:42,737 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:42,740 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:42,740 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:31:42,740 INFO sqlalchemy.engine.Engine [cached since 37.83s ago] ()
+INFO:     127.0.0.1:62634 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:31:42,744 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:42,744 INFO sqlalchemy.engine.Engine [cached since 73.98s ago] (1,)
+2026-06-21 23:31:42,745 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:42,748 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:42,748 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:31:42,748 INFO sqlalchemy.engine.Engine [cached since 37.83s ago] ()
+INFO:     127.0.0.1:62637 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:31:42,750 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:42,751 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:42,752 INFO sqlalchemy.engine.Engine [cached since 73.98s ago] (1,)
+INFO:     127.0.0.1:62634 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:31:42,754 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62625 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:31:42,756 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:44,736 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:44,736 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:44,737 INFO sqlalchemy.engine.Engine [cached since 76.4s ago] ('admin',)
+2026-06-21 23:31:44,739 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:31:44,740 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:31:44,741 INFO sqlalchemy.engine.Engine [cached since 76.4s ago] ('admin',)
+2026-06-21 23:31:44,743 INFO sqlalchemy.engine.Engine SELECT pedidos.status_producao, count(pedidos.id) AS count_1 
+FROM pedidos GROUP BY pedidos.status_producao
+2026-06-21 23:31:44,743 INFO sqlalchemy.engine.Engine [cached since 9.165s ago] ()
+2026-06-21 23:31:44,746 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos 
+WHERE pedidos.status_producao IN (?, ?, ?, ?, ?) ORDER BY pedidos.criado_em ASC
+2026-06-21 23:31:44,746 INFO sqlalchemy.engine.Engine [cached since 9.171s ago] ('pendente', 'aguardando_material', 'em_producao', 'para_embalar', 'pronto_entrega')
+2026-06-21 23:31:44,750 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:31:44,750 INFO sqlalchemy.engine.Engine [cached since 9.168s ago] (1,)
+INFO:     127.0.0.1:62634 - "GET /producao/resumo HTTP/1.1" 200 OK
+2026-06-21 23:31:44,753 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:31:44,757 INFO sqlalchemy.engine.Engine SELECT clientes.id AS clientes_id, clientes.nome AS clientes_nome, clientes.sobrenome AS clientes_sobrenome, clientes.telefone AS clientes_telefone, clientes.email AS clientes_email, clientes.endereco AS clientes_endereco, clientes.cep AS clientes_cep, clientes.criado_em AS clientes_criado_em 
+FROM clientes 
+WHERE clientes.id IN (?)
+2026-06-21 23:31:44,757 INFO sqlalchemy.engine.Engine [cached since 9.168s ago] (1,)
+2026-06-21 23:31:44,761 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:31:44,761 INFO sqlalchemy.engine.Engine [cached since 9.168s ago] (1,)
+INFO:     127.0.0.1:62625 - "GET /producao/fila HTTP/1.1" 200 OK
+2026-06-21 23:31:44,765 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62640 - "OPTIONS /compras/fornecedores HTTP/1.1" 200 OK
+2026-06-21 23:32:00,487 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:00,488 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:00,488 INFO sqlalchemy.engine.Engine [cached since 92.15s ago] ('admin',)
+2026-06-21 23:32:00,493 INFO sqlalchemy.engine.Engine SELECT fornecedores.id, fornecedores.nome, fornecedores.contato, fornecedores.telefone, fornecedores.email, fornecedores.endereco, fornecedores.cep, fornecedores.criado_em 
+FROM fornecedores ORDER BY fornecedores.nome
+2026-06-21 23:32:00,494 INFO sqlalchemy.engine.Engine [generated in 0.00142s] ()
+INFO:     127.0.0.1:62640 - "GET /compras/fornecedores HTTP/1.1" 200 OK
+2026-06-21 23:32:00,498 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62641 - "OPTIONS /compras/ordens HTTP/1.1" 200 OK
+2026-06-21 23:32:28,133 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:28,133 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:28,133 INFO sqlalchemy.engine.Engine [cached since 119.8s ago] ('admin',)
+2026-06-21 23:32:28,137 INFO sqlalchemy.engine.Engine SELECT ordens_compra.id, ordens_compra.fornecedor_id, ordens_compra.status, ordens_compra.data_emissao, ordens_compra.data_prevista, ordens_compra.observacao, ordens_compra.criado_em, ordens_compra.atualizado_em 
+FROM ordens_compra ORDER BY ordens_compra.criado_em DESC
+2026-06-21 23:32:28,137 INFO sqlalchemy.engine.Engine [generated in 0.00032s] ()
+INFO:     127.0.0.1:62641 - "GET /compras/ordens HTTP/1.1" 200 OK
+2026-06-21 23:32:28,139 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:29,110 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:29,110 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:29,111 INFO sqlalchemy.engine.Engine [cached since 120.8s ago] ('admin',)
+2026-06-21 23:32:29,112 INFO sqlalchemy.engine.Engine SELECT fornecedores.id, fornecedores.nome, fornecedores.contato, fornecedores.telefone, fornecedores.email, fornecedores.endereco, fornecedores.cep, fornecedores.criado_em 
+FROM fornecedores ORDER BY fornecedores.nome
+2026-06-21 23:32:29,112 INFO sqlalchemy.engine.Engine [cached since 28.62s ago] ()
+INFO:     127.0.0.1:62641 - "GET /compras/fornecedores HTTP/1.1" 200 OK
+2026-06-21 23:32:29,114 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62641 - "OPTIONS /compras/sugerir HTTP/1.1" 200 OK
+2026-06-21 23:32:32,111 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:32,111 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:32,111 INFO sqlalchemy.engine.Engine [cached since 123.8s ago] ('admin',)
+2026-06-21 23:32:32,114 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras 
+WHERE molduras.quantidade < ?
+2026-06-21 23:32:32,114 INFO sqlalchemy.engine.Engine [generated in 0.00045s] (3,)
+2026-06-21 23:32:32,117 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros 
+WHERE vidros.quantidade < ?
+2026-06-21 23:32:32,117 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (2,)
+2026-06-21 23:32:32,119 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos 
+WHERE fundos.quantidade < ?
+2026-06-21 23:32:32,119 INFO sqlalchemy.engine.Engine [generated in 0.00035s] (2,)
+2026-06-21 23:32:32,121 INFO sqlalchemy.engine.Engine SELECT suplementos.id, suplementos.nome, suplementos.quantidade, suplementos.unidade 
+FROM suplementos 
+WHERE suplementos.quantidade < ?
+2026-06-21 23:32:32,121 INFO sqlalchemy.engine.Engine [generated in 0.00030s] (5,)
+INFO:     127.0.0.1:62641 - "GET /compras/sugerir HTTP/1.1" 200 OK
+2026-06-21 23:32:32,123 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:34,270 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:34,271 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:34,271 INFO sqlalchemy.engine.Engine [cached since 125.9s ago] ('admin',)
+2026-06-21 23:32:34,273 INFO sqlalchemy.engine.Engine SELECT fornecedores.id, fornecedores.nome, fornecedores.contato, fornecedores.telefone, fornecedores.email, fornecedores.endereco, fornecedores.cep, fornecedores.criado_em 
+FROM fornecedores ORDER BY fornecedores.nome
+2026-06-21 23:32:34,273 INFO sqlalchemy.engine.Engine [cached since 33.78s ago] ()
+INFO:     127.0.0.1:62641 - "GET /compras/fornecedores HTTP/1.1" 200 OK
+2026-06-21 23:32:34,275 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:36,439 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:36,439 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:32:36,440 INFO sqlalchemy.engine.Engine [cached since 127.6s ago] ()
+INFO:     127.0.0.1:62641 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:32:36,446 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:36,448 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:36,466 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:32:36,466 INFO sqlalchemy.engine.Engine [cached since 91.55s ago] ()
+INFO:     127.0.0.1:62641 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:32:36,468 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:36,470 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:36,470 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:32:36,470 INFO sqlalchemy.engine.Engine [cached since 91.55s ago] ()
+INFO:     127.0.0.1:62641 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:32:36,472 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:39,734 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:39,735 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:39,736 INFO sqlalchemy.engine.Engine [cached since 131.4s ago] ('admin',)
+2026-06-21 23:32:39,739 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:32:39,740 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:32:39,740 INFO sqlalchemy.engine.Engine [cached since 131.4s ago] ('admin',)
+2026-06-21 23:32:39,745 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_receber.valor), ?) AS coalesce_1, coalesce(sum(contas_receber.valor_recebido), ?) AS coalesce_3 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?)
+2026-06-21 23:32:39,746 INFO sqlalchemy.engine.Engine [cached since 86.02s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:32:39,747 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber ORDER BY contas_receber.data_vencimento ASC
+2026-06-21 23:32:39,748 INFO sqlalchemy.engine.Engine [cached since 86.01s ago] ()
+INFO:     127.0.0.1:62647 - "GET /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:32:39,752 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:32:39,753 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_pagar.valor), ?) AS coalesce_1, coalesce(sum(contas_pagar.valor_pago), ?) AS coalesce_3 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?)
+2026-06-21 23:32:39,754 INFO sqlalchemy.engine.Engine [cached since 86.02s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:32:39,756 INFO sqlalchemy.engine.Engine SELECT count(contas_receber.id) AS count_1 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?) AND contas_receber.data_vencimento < ?
+2026-06-21 23:32:39,756 INFO sqlalchemy.engine.Engine [cached since 86.01s ago] ('pendente', 'parcial', '2026-06-21')
+2026-06-21 23:32:39,759 INFO sqlalchemy.engine.Engine SELECT count(contas_pagar.id) AS count_1 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?) AND contas_pagar.data_vencimento < ?
+2026-06-21 23:32:39,759 INFO sqlalchemy.engine.Engine [cached since 86.01s ago] ('pendente', 'parcial', '2026-06-21')
+INFO:     127.0.0.1:62641 - "GET /financeiro/resumo HTTP/1.1" 200 OK
+2026-06-21 23:32:39,762 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62648 - "OPTIONS /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:33:10,439 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:10,440 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:10,440 INFO sqlalchemy.engine.Engine [cached since 162.1s ago] ('admin',)
+2026-06-21 23:33:10,442 INFO sqlalchemy.engine.Engine INSERT INTO contas_receber (pedido_id, descricao, valor, valor_recebido, data_vencimento, data_recebimento, status, observacao, criado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:33:10,443 INFO sqlalchemy.engine.Engine [generated in 0.00060s] (None, 'figuras', 1000.0, 0.0, '2026-06-25', None, 'pendente', 'banana decor', '2026-06-22 02:33:10.442866')
+2026-06-21 23:33:10,446 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-21 23:33:10,450 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:10,451 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber 
+WHERE contas_receber.id = ?
+2026-06-21 23:33:10,451 INFO sqlalchemy.engine.Engine [generated in 0.00032s] (1,)
+INFO:     127.0.0.1:62648 - "POST /financeiro/contas-receber HTTP/1.1" 201 Created
+2026-06-21 23:33:10,454 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:10,462 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:10,462 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:10,463 INFO sqlalchemy.engine.Engine [cached since 162.1s ago] ('admin',)
+2026-06-21 23:33:10,465 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber ORDER BY contas_receber.data_vencimento ASC
+2026-06-21 23:33:10,465 INFO sqlalchemy.engine.Engine [cached since 116.7s ago] ()
+INFO:     127.0.0.1:62648 - "GET /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:33:10,468 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:10,470 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:10,470 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:10,471 INFO sqlalchemy.engine.Engine [cached since 162.1s ago] ('admin',)
+2026-06-21 23:33:10,473 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_receber.valor), ?) AS coalesce_1, coalesce(sum(contas_receber.valor_recebido), ?) AS coalesce_3 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?)
+2026-06-21 23:33:10,473 INFO sqlalchemy.engine.Engine [cached since 116.8s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:33:10,475 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_pagar.valor), ?) AS coalesce_1, coalesce(sum(contas_pagar.valor_pago), ?) AS coalesce_3 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?)
+2026-06-21 23:33:10,476 INFO sqlalchemy.engine.Engine [cached since 116.7s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:33:10,478 INFO sqlalchemy.engine.Engine SELECT count(contas_receber.id) AS count_1 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?) AND contas_receber.data_vencimento < ?
+2026-06-21 23:33:10,478 INFO sqlalchemy.engine.Engine [cached since 116.7s ago] ('pendente', 'parcial', '2026-06-21')
+2026-06-21 23:33:10,480 INFO sqlalchemy.engine.Engine SELECT count(contas_pagar.id) AS count_1 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?) AND contas_pagar.data_vencimento < ?
+2026-06-21 23:33:10,480 INFO sqlalchemy.engine.Engine [cached since 116.7s ago] ('pendente', 'parcial', '2026-06-21')
+INFO:     127.0.0.1:62648 - "GET /financeiro/resumo HTTP/1.1" 200 OK
+2026-06-21 23:33:10,483 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62653 - "OPTIONS /financeiro/contas-pagar HTTP/1.1" 200 OK
+2026-06-21 23:33:17,365 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:17,366 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:17,366 INFO sqlalchemy.engine.Engine [cached since 169s ago] ('admin',)
+2026-06-21 23:33:17,370 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar ORDER BY contas_pagar.data_vencimento ASC
+2026-06-21 23:33:17,371 INFO sqlalchemy.engine.Engine [generated in 0.00041s] ()
+INFO:     127.0.0.1:62653 - "GET /financeiro/contas-pagar HTTP/1.1" 200 OK
+2026-06-21 23:33:17,373 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62654 - "OPTIONS /financeiro/contas-pagar HTTP/1.1" 200 OK
+2026-06-21 23:33:29,029 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:29,030 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:29,030 INFO sqlalchemy.engine.Engine [cached since 180.7s ago] ('admin',)
+2026-06-21 23:33:29,032 INFO sqlalchemy.engine.Engine INSERT INTO contas_pagar (fornecedor_id, descricao, valor, valor_pago, data_vencimento, data_pagamento, status, observacao, criado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-21 23:33:29,033 INFO sqlalchemy.engine.Engine [generated in 0.00045s] (None, 'bdfbf', 2000.0, 0.0, '2026-07-11', None, 'pendente', 'ffg', '2026-06-22 02:33:29.032872')
+2026-06-21 23:33:29,035 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-21 23:33:29,040 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:29,042 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar 
+WHERE contas_pagar.id = ?
+2026-06-21 23:33:29,042 INFO sqlalchemy.engine.Engine [generated in 0.00048s] (1,)
+INFO:     127.0.0.1:62654 - "POST /financeiro/contas-pagar HTTP/1.1" 201 Created
+2026-06-21 23:33:29,045 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:29,051 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:29,051 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:29,052 INFO sqlalchemy.engine.Engine [cached since 180.7s ago] ('admin',)
+2026-06-21 23:33:29,054 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar ORDER BY contas_pagar.data_vencimento ASC
+2026-06-21 23:33:29,054 INFO sqlalchemy.engine.Engine [cached since 11.68s ago] ()
+INFO:     127.0.0.1:62654 - "GET /financeiro/contas-pagar HTTP/1.1" 200 OK
+2026-06-21 23:33:29,058 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:29,062 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:29,063 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:29,063 INFO sqlalchemy.engine.Engine [cached since 180.7s ago] ('admin',)
+2026-06-21 23:33:29,066 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_receber.valor), ?) AS coalesce_1, coalesce(sum(contas_receber.valor_recebido), ?) AS coalesce_3 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?)
+2026-06-21 23:33:29,066 INFO sqlalchemy.engine.Engine [cached since 135.3s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:33:29,069 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(contas_pagar.valor), ?) AS coalesce_1, coalesce(sum(contas_pagar.valor_pago), ?) AS coalesce_3 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?)
+2026-06-21 23:33:29,069 INFO sqlalchemy.engine.Engine [cached since 135.3s ago] (0, 0, 'pendente', 'parcial')
+2026-06-21 23:33:29,071 INFO sqlalchemy.engine.Engine SELECT count(contas_receber.id) AS count_1 
+FROM contas_receber 
+WHERE contas_receber.status IN (?, ?) AND contas_receber.data_vencimento < ?
+2026-06-21 23:33:29,071 INFO sqlalchemy.engine.Engine [cached since 135.3s ago] ('pendente', 'parcial', '2026-06-21')
+2026-06-21 23:33:29,072 INFO sqlalchemy.engine.Engine SELECT count(contas_pagar.id) AS count_1 
+FROM contas_pagar 
+WHERE contas_pagar.status IN (?, ?) AND contas_pagar.data_vencimento < ?
+2026-06-21 23:33:29,073 INFO sqlalchemy.engine.Engine [cached since 135.3s ago] ('pendente', 'parcial', '2026-06-21')
+INFO:     127.0.0.1:62654 - "GET /financeiro/resumo HTTP/1.1" 200 OK
+2026-06-21 23:33:29,076 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62658 - "OPTIONS /financeiro/fluxo-caixa HTTP/1.1" 200 OK
+2026-06-21 23:33:34,111 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:34,111 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:34,112 INFO sqlalchemy.engine.Engine [cached since 185.8s ago] ('admin',)
+2026-06-21 23:33:34,114 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber 
+WHERE contas_receber.data_vencimento BETWEEN ? AND ? ORDER BY contas_receber.data_vencimento
+2026-06-21 23:33:34,115 INFO sqlalchemy.engine.Engine [generated in 0.00036s] ('2026-05-22', '2026-07-21')
+2026-06-21 23:33:34,117 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar 
+WHERE contas_pagar.data_vencimento BETWEEN ? AND ? ORDER BY contas_pagar.data_vencimento
+2026-06-21 23:33:34,117 INFO sqlalchemy.engine.Engine [generated in 0.00028s] ('2026-05-22', '2026-07-21')
+INFO:     127.0.0.1:62658 - "GET /financeiro/fluxo-caixa HTTP/1.1" 200 OK
+2026-06-21 23:33:34,119 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:42,370 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:42,371 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:42,371 INFO sqlalchemy.engine.Engine [cached since 194s ago] ('admin',)
+2026-06-21 23:33:42,373 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber 
+WHERE contas_receber.data_vencimento BETWEEN ? AND ? ORDER BY contas_receber.data_vencimento
+2026-06-21 23:33:42,374 INFO sqlalchemy.engine.Engine [cached since 8.26s ago] ('2026-05-22', '2026-07-21')
+2026-06-21 23:33:42,376 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar 
+WHERE contas_pagar.data_vencimento BETWEEN ? AND ? ORDER BY contas_pagar.data_vencimento
+2026-06-21 23:33:42,376 INFO sqlalchemy.engine.Engine [cached since 8.26s ago] ('2026-05-22', '2026-07-21')
+INFO:     127.0.0.1:62659 - "GET /financeiro/fluxo-caixa HTTP/1.1" 200 OK
+2026-06-21 23:33:42,379 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:43,609 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:43,610 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:43,610 INFO sqlalchemy.engine.Engine [cached since 195.3s ago] ('admin',)
+2026-06-21 23:33:43,613 INFO sqlalchemy.engine.Engine SELECT contas_pagar.id, contas_pagar.fornecedor_id, contas_pagar.descricao, contas_pagar.valor, contas_pagar.valor_pago, contas_pagar.data_vencimento, contas_pagar.data_pagamento, contas_pagar.status, contas_pagar.observacao, contas_pagar.criado_em 
+FROM contas_pagar ORDER BY contas_pagar.data_vencimento ASC
+2026-06-21 23:33:43,614 INFO sqlalchemy.engine.Engine [cached since 26.24s ago] ()
+INFO:     127.0.0.1:62659 - "GET /financeiro/contas-pagar HTTP/1.1" 200 OK
+2026-06-21 23:33:43,616 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:44,528 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:44,528 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:44,529 INFO sqlalchemy.engine.Engine [cached since 196.2s ago] ('admin',)
+2026-06-21 23:33:44,531 INFO sqlalchemy.engine.Engine SELECT contas_receber.id, contas_receber.pedido_id, contas_receber.descricao, contas_receber.valor, contas_receber.valor_recebido, contas_receber.data_vencimento, contas_receber.data_recebimento, contas_receber.status, contas_receber.observacao, contas_receber.criado_em 
+FROM contas_receber ORDER BY contas_receber.data_vencimento ASC
+2026-06-21 23:33:44,532 INFO sqlalchemy.engine.Engine [cached since 150.8s ago] ()
+INFO:     127.0.0.1:62659 - "GET /financeiro/contas-receber HTTP/1.1" 200 OK
+2026-06-21 23:33:44,534 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:50,508 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:50,509 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:33:50,509 INFO sqlalchemy.engine.Engine [cached since 201.7s ago] ()
+2026-06-21 23:33:50,511 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:50,512 INFO sqlalchemy.engine.Engine SELECT vidros.id, vidros.espessura, vidros.tipo, vidros.quantidade, vidros.largura_chapa, vidros.altura_chapa, vidros.cor 
+FROM vidros
+2026-06-21 23:33:50,512 INFO sqlalchemy.engine.Engine [cached since 165.6s ago] ()
+2026-06-21 23:33:50,513 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:50,513 INFO sqlalchemy.engine.Engine SELECT fundos.id, fundos.tipo, fundos.espessura, fundos.quantidade, fundos.largura, fundos.altura, fundos.cor 
+FROM fundos
+2026-06-21 23:33:50,513 INFO sqlalchemy.engine.Engine [cached since 165.6s ago] ()
+2026-06-21 23:33:50,514 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:50,514 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:50,515 INFO sqlalchemy.engine.Engine [cached since 202.2s ago] ('admin',)
+2026-06-21 23:33:50,515 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:50,516 INFO sqlalchemy.engine.Engine SELECT usuarios.id, usuarios.nome_usuario, usuarios.senha_hash, usuarios.nome_completo, usuarios.esta_ativo, usuarios.criado_em 
+FROM usuarios 
+WHERE usuarios.nome_usuario = ?
+2026-06-21 23:33:50,516 INFO sqlalchemy.engine.Engine [cached since 202.2s ago] ('admin',)
+INFO:     127.0.0.1:62667 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:33:50,519 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:50,520 INFO sqlalchemy.engine.Engine SELECT clientes.id, clientes.nome, clientes.sobrenome, clientes.telefone, clientes.email, clientes.endereco, clientes.cep, clientes.criado_em 
+FROM clientes
+2026-06-21 23:33:50,521 INFO sqlalchemy.engine.Engine [cached since 201.8s ago] ()
+INFO:     127.0.0.1:62669 - "GET /estoque/fundos HTTP/1.1" 200 OK
+2026-06-21 23:33:50,522 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:50,524 INFO sqlalchemy.engine.Engine SELECT pedidos.id, pedidos.cliente_id, pedidos.numero_pedido, pedidos.status_geral, pedidos.status_producao, pedidos.status_financeiro, pedidos.valor_total, pedidos.valor_sinal, pedidos.saldo_devedor, pedidos.endereco_entrega, pedidos.frete, pedidos.criado_em, pedidos.atualizado_em 
+FROM pedidos ORDER BY pedidos.criado_em DESC
+2026-06-21 23:33:50,524 INFO sqlalchemy.engine.Engine [cached since 201.7s ago] ()
+INFO:     127.0.0.1:62668 - "GET /estoque/vidros HTTP/1.1" 200 OK
+2026-06-21 23:33:50,525 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:62671 - "GET /clientes/ HTTP/1.1" 200 OK
+2026-06-21 23:33:50,528 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:50,529 INFO sqlalchemy.engine.Engine SELECT pedidos_eventos.pedido_id AS pedidos_eventos_pedido_id, pedidos_eventos.id AS pedidos_eventos_id, pedidos_eventos.eixo AS pedidos_eventos_eixo, pedidos_eventos.status_anterior AS pedidos_eventos_status_anterior, pedidos_eventos.status_novo AS pedidos_eventos_status_novo, pedidos_eventos.observacao AS pedidos_eventos_observacao, pedidos_eventos.criado_em AS pedidos_eventos_criado_em 
+FROM pedidos_eventos 
+WHERE pedidos_eventos.pedido_id IN (?)
+2026-06-21 23:33:50,530 INFO sqlalchemy.engine.Engine [cached since 201.8s ago] (1,)
+2026-06-21 23:33:50,533 INFO sqlalchemy.engine.Engine SELECT itens_pedido.pedido_id AS itens_pedido_pedido_id, itens_pedido.id AS itens_pedido_id, itens_pedido.descricao AS itens_pedido_descricao, itens_pedido.quantidade AS itens_pedido_quantidade, itens_pedido.preco_unitario AS itens_pedido_preco_unitario, itens_pedido.subtotal AS itens_pedido_subtotal, itens_pedido.moldura_id AS itens_pedido_moldura_id, itens_pedido.vidro_id AS itens_pedido_vidro_id, itens_pedido.fundo_id AS itens_pedido_fundo_id, itens_pedido.largura AS itens_pedido_largura, itens_pedido.altura AS itens_pedido_altura 
+FROM itens_pedido 
+WHERE itens_pedido.pedido_id IN (?)
+2026-06-21 23:33:50,533 INFO sqlalchemy.engine.Engine [cached since 201.8s ago] (1,)
+INFO:     127.0.0.1:62670 - "GET /pedidos/ HTTP/1.1" 200 OK
+2026-06-21 23:33:50,535 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-06-21 23:33:59,194 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-21 23:33:59,195 INFO sqlalchemy.engine.Engine SELECT molduras.id, molduras.codigo, molduras.quantidade, molduras.preco_venda, molduras.preco_custo, molduras.cor, molduras.tamanho_barra, molduras.largura_barra, molduras.marca 
+FROM molduras
+2026-06-21 23:33:59,196 INFO sqlalchemy.engine.Engine [cached since 210.4s ago] ()
+INFO:     127.0.0.1:62672 - "GET /estoque/molduras HTTP/1.1" 200 OK
+2026-06-21 23:33:59,199 INFO sqlalchemy.engine.Engine ROLLBACK

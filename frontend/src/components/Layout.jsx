@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Box, Users, ShoppingCart, LogOut, Calculator, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Box, Users, ShoppingCart, LogOut, Calculator, Menu, X, ClipboardList, Truck, DollarSign } from 'lucide-react';
 import { useAutenticacao } from '../context/ContextoAutenticacao';
 
 const Layout = ({ children }) => {
@@ -40,7 +40,9 @@ const Layout = ({ children }) => {
           <MenuItem to="/" icone={<LayoutDashboard size={20} />} texto="Dashboard" onClick={() => setMenuAberto(false)} />
           <MenuItem to="/estoque" icone={<Box size={20} />} texto="Estoque" onClick={() => setMenuAberto(false)} />
           <MenuItem to="/clientes" icone={<Users size={20} />} texto="Clientes" onClick={() => setMenuAberto(false)} />
-          <MenuItem to="/pedidos" icone={<ShoppingCart size={20} />} texto="Pedidos" onClick={() => setMenuAberto(false)} />
+          <MenuItem to="/producao" icone={<ShoppingCart size={20} />} texto="Produção" onClick={() => setMenuAberto(false)} />
+          <MenuItem to="/compras" icone={<Truck size={20} />} texto="Compras" onClick={() => setMenuAberto(false)} />
+          <MenuItem to="/financeiro" icone={<DollarSign size={20} />} texto="Financeiro" onClick={() => setMenuAberto(false)} />
           <MenuItem to="/calculadora" icone={<Calculator size={20} />} texto="Calculadora" onClick={() => setMenuAberto(false)} />
         </nav>
 

@@ -114,7 +114,7 @@ const Calculadora = () => {
           <div className="card" style={{ marginBottom: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3>Molduras</h3>
-              <button className="btn btn-glass" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }} onClick={adicionarMoldura}>
+              <button className="btn btn-secondary" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }} onClick={adicionarMoldura}>
                 <Plus size={14} /> Adicionar
               </button>
             </div>
@@ -221,7 +221,7 @@ const Calculadora = () => {
                 </div>
               </div>
 
-              <button className="btn btn-glass" style={{ marginTop: '1.5rem', width: '100%' }} onClick={() => setResultado(null)}>
+              <button className="btn btn-secondary" style={{ marginTop: '1.5rem', width: '100%' }} onClick={() => setResultado(null)}>
                 <RefreshCw size={18} /> Nova Simulacao
               </button>
             </div>
