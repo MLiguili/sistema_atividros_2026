@@ -9,6 +9,7 @@ from sqlalchemy.orm import selectinload
 from app.models.estoque import Fundo, Moldura, Vidro
 from app.models.pedido import Eixo, ItemPedido, Pedido, PedidoEvento, StatusFinanceiro, StatusGeral, StatusProducao
 from app.schemas.pedido import CriarPedido
+from app.services.sequencia import gerar_numero_pedido
 
 logger = logging.getLogger(__name__)
 
@@ -35,15 +36,6 @@ TRANSICOES_FINANCEIRO = {
     "pago_total": ["estornado"],
     "estornado": ["sem_pagamento"],
 }
-
-NUMERO_COUNTER = {"valor": 1}
-
-
-def gerar_numero_pedido(db: AsyncSession) -> str:
-    ano = 2026
-    seq = NUMERO_COUNTER["valor"]
-    NUMERO_COUNTER["valor"] += 1
-    return f"{ano}{seq:05d}"
 
 
 async def validar_transicao(eixo: Eixo, status_atual: str, novo_status: str) -> bool:
@@ -111,7 +103,7 @@ async def obter_detalhes_calculo(item: dict, db: AsyncSession) -> tuple:
 
 
 async def criar_novo_pedido(dados: CriarPedido, db: AsyncSession) -> Pedido:
-    numero = gerar_numero_pedido(db)
+    numero = await gerar_numero_pedido(db)
     logger.debug("Criando pedido %s para cliente %s", numero, dados.cliente_id)
     novo_pedido = Pedido(
         cliente_id=dados.cliente_id,
