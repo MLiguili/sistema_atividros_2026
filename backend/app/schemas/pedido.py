@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -70,4 +70,24 @@ class RespostaPedido(BasePedido):
     atualizado_em: datetime
     itens: list[RespostaItemPedido]
     eventos: list[RespostaEventoPedido] = []
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RespostaPedidoResumo(BaseModel):
+    """
+    Resumo enxuto de pedido utilizado em listagens e no histórico por cliente.
+    """
+
+    id: int
+    cliente_id: int
+    numero_pedido: str
+    status_geral: StatusGeral
+    status_producao: StatusProducao
+    status_financeiro: StatusFinanceiro
+    data_validade_orcamento: date | None = None
+    prazo_entrega: date | None = None
+    valor_total: Decimal
+    valor_pago: Decimal
+    saldo_devedor: Decimal
+    criado_em: datetime
     model_config = ConfigDict(from_attributes=True)

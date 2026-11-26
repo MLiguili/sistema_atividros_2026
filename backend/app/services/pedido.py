@@ -50,58 +50,6 @@ async def validar_transicao(eixo: Eixo, status_atual: str, novo_status: str) -> 
     return novo_status in permitidas
 
 
-async def obter_detalhes_calculo(item: dict, db: AsyncSession) -> tuple:
-    detalhes = []
-    total = Decimal("0.0")
-
-    if item.get("moldura_id"):
-        resultado = await db.execute(select(Moldura).where(Moldura.id == item["moldura_id"]))
-        obj = resultado.scalar_one_or_none()
-        if obj:
-            metragem = (Decimal(2) * (Decimal(str(item["largura"])) + Decimal(str(item["altura"])))) / Decimal("100")
-            preco = (metragem * obj.preco_venda).quantize(Decimal("0.01"))
-            detalhes.append({
-                "tipo": "moldura",
-                "nome": f"Moldura {obj.codigo} ({obj.cor})",
-                "medida_calculada": float(metragem),
-                "unidade": "m",
-                "preco_estimado": float(preco)
-            })
-            total += preco
-
-    if item.get("vidro_id"):
-        resultado = await db.execute(select(Vidro).where(Vidro.id == item["vidro_id"]))
-        obj = resultado.scalar_one_or_none()
-        if obj:
-            area = (Decimal(str(item["largura"])) * Decimal(str(item["altura"]))) / Decimal("10000")
-            preco = (area * Decimal("100.0")).quantize(Decimal("0.01"))
-            detalhes.append({
-                "tipo": "vidro",
-                "nome": f"Vidro {obj.tipo} {obj.espessura}mm",
-                "medida_calculada": float(area),
-                "unidade": "m2",
-                "preco_estimado": float(preco)
-            })
-            total += preco
-
-    if item.get("fundo_id"):
-        resultado = await db.execute(select(Fundo).where(Fundo.id == item["fundo_id"]))
-        obj = resultado.scalar_one_or_none()
-        if obj:
-            area = (Decimal(str(item["largura"])) * Decimal(str(item["altura"]))) / Decimal("10000")
-            preco = (area * Decimal("30.0")).quantize(Decimal("0.01"))
-            detalhes.append({
-                "tipo": "fundo",
-                "nome": f"Fundo {obj.tipo}",
-                "medida_calculada": float(area),
-                "unidade": "m2",
-                "preco_estimado": float(preco)
-            })
-            total += preco
-
-    return detalhes, total
-
-
 async def criar_novo_pedido(dados: CriarPedido, db: AsyncSession) -> Pedido:
     numero = await gerar_numero_pedido(db)
     logger.debug("Criando pedido %s para cliente %s", numero, dados.cliente_id)
