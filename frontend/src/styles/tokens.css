@@ -1,0 +1,170 @@
+/* ==========================================================================
+   TOKENS DE DESIGN ATIVIDROS V1.0 (3 CAMADAS)
+   ========================================================================== */
+
+:root {
+  /* Camada 1: Primitivos */
+  --at-prim-slate-950: #0B1120;
+  --at-prim-slate-925: #0E1729;
+  --at-prim-slate-900: #101829;
+  --at-prim-slate-850: #131C2E;
+  --at-prim-slate-825: #1E293B;
+  --at-prim-slate-800: #1B2740;
+  --at-prim-slate-750: #24324D;
+  --at-prim-slate-600: #475569;
+  --at-prim-slate-500: #64748B;
+  --at-prim-slate-400: #94A3B8;
+  --at-prim-slate-300: #CBD5E1;
+  --at-prim-slate-200: #E2E8F0;
+  --at-prim-slate-50:  #F8FAFC;
+
+  --at-prim-emerald-950: #042F2E;
+  --at-prim-emerald-900: #0B2922;
+  --at-prim-emerald-600: #059669;
+  --at-prim-emerald-500: #10B981;
+  --at-prim-emerald-400: #34D399;
+
+  --at-prim-amber-950:    #2B200B;
+  --at-prim-amber-500:    #F59E0B;
+  --at-prim-amber-400:    #FBBF24;
+  --at-prim-orange-950:   #2C1B0E;
+  --at-prim-orange-300:   #FDBA74;
+  --at-prim-sky-950:      #0F2436;
+  --at-prim-sky-400:      #38BDF8;
+  --at-prim-sky-300:      #7DD3FC;
+  --at-prim-blue-950:     #14223B;
+  --at-prim-blue-300:     #93C5FD;
+  --at-prim-navy-850:     #1A2232;
+  --at-prim-violet-950:   #20193B;
+  --at-prim-violet-300:   #C4B5FD;
+  --at-prim-teal-950:     #0B2828;
+  --at-prim-teal-300:     #5EEAD4;
+  --at-prim-rose-950:     #2E111B;
+  --at-prim-rose-400:     #FB7185;
+  --at-prim-red-600:      #DC2626;
+  --at-prim-graphite-800: #252B36;
+  --at-prim-white:        #FFFFFF;
+
+  /* Camada 2 & 3: Tokens Semânticos */
+  --at-color-bg-canvas:   var(--at-prim-slate-950);
+  --at-color-bg-subtle:   var(--at-prim-slate-925);
+  --at-color-bg-sidebar:  var(--at-prim-slate-900);
+  --at-color-bg-surface:  var(--at-prim-slate-850);
+  --at-color-bg-elevated: var(--at-prim-slate-800);
+  --at-color-bg-hover:    rgba(248, 250, 252, 0.05);
+  --at-color-bg-scrim:    rgba(11, 17, 32, 0.82);
+
+  --at-color-text-primary:   var(--at-prim-slate-50);
+  --at-color-text-secondary: var(--at-prim-slate-300);
+  --at-color-text-muted:     var(--at-prim-slate-400);
+  --at-color-text-disabled:  var(--at-prim-slate-500);
+  --at-color-text-brand:     var(--at-prim-emerald-400);
+
+  --at-color-border-subtle:  var(--at-prim-slate-750);
+  --at-color-border-strong:  var(--at-prim-slate-500);
+  --at-color-border-focus:   var(--at-prim-emerald-400);
+
+  --at-color-action-primary-bg:       var(--at-prim-emerald-500);
+  --at-color-action-primary-fg:       var(--at-prim-emerald-950);
+  --at-color-action-primary-hover-bg: var(--at-prim-emerald-400);
+  --at-color-action-secondary-bg:     var(--at-prim-slate-800);
+  --at-color-action-secondary-fg:     var(--at-prim-slate-50);
+  --at-color-action-danger-bg:        var(--at-prim-red-600);
+  --at-color-action-danger-fg:        var(--at-prim-white);
+
+  --at-color-feedback-success-fg:     var(--at-prim-emerald-400);
+  --at-color-feedback-success-bg:     var(--at-prim-emerald-900);
+  --at-color-feedback-success-border: var(--at-prim-emerald-500);
+
+  --at-color-feedback-warning-fg:     var(--at-prim-amber-400);
+  --at-color-feedback-warning-bg:     var(--at-prim-amber-950);
+  --at-color-feedback-warning-border: var(--at-prim-amber-500);
+
+  --at-color-feedback-danger-fg:      var(--at-prim-rose-400);
+  --at-color-feedback-danger-bg:      var(--at-prim-rose-950);
+  --at-color-feedback-danger-border:  var(--at-prim-red-600);
+
+  --at-color-feedback-info-fg:        var(--at-prim-sky-400);
+  --at-color-feedback-info-bg:        var(--at-prim-sky-950);
+  --at-color-feedback-info-border:    var(--at-prim-sky-400);
+
+  /* Eixo 1 - Geral */
+  --at-color-status-geral-rascunho-fg:   var(--at-prim-slate-300);
+  --at-color-status-geral-rascunho-bg:   var(--at-prim-slate-825);
+  --at-color-status-geral-confirmado-fg: var(--at-prim-blue-300);
+  --at-color-status-geral-confirmado-bg: var(--at-prim-blue-950);
+  --at-color-status-geral-entregue-fg:   var(--at-prim-emerald-400);
+  --at-color-status-geral-entregue-bg:   var(--at-prim-emerald-900);
+  --at-color-status-geral-arquivado-fg:  var(--at-prim-slate-400);
+  --at-color-status-geral-arquivado-bg:  var(--at-prim-navy-850);
+  --at-color-status-geral-cancelado-fg:  var(--at-prim-rose-400);
+  --at-color-status-geral-cancelado-bg:  var(--at-prim-rose-950);
+
+  /* Eixo 2 - Produção */
+  --at-color-status-prod-pendente-fg:    var(--at-prim-slate-300);
+  --at-color-status-prod-pendente-bg:    var(--at-prim-slate-825);
+  --at-color-status-prod-aguardando-fg:  var(--at-prim-orange-300);
+  --at-color-status-prod-aguardando-bg:  var(--at-prim-orange-950);
+  --at-color-status-prod-na-fila-fg:     var(--at-prim-sky-300);
+  --at-color-status-prod-na-fila-bg:     var(--at-prim-sky-950);
+  --at-color-status-prod-em-producao-fg: var(--at-prim-violet-300);
+  --at-color-status-prod-em-producao-bg: var(--at-prim-violet-950);
+  --at-color-status-prod-embalando-fg:   var(--at-prim-teal-300);
+  --at-color-status-prod-embalando-bg:   var(--at-prim-teal-950);
+  --at-color-status-prod-pronto-fg:      var(--at-prim-emerald-400);
+  --at-color-status-prod-pronto-bg:      var(--at-prim-emerald-900);
+
+  /* Eixo 3 - Financeiro */
+  --at-color-status-fin-sem-fg:       var(--at-prim-rose-400);
+  --at-color-status-fin-sem-bg:       var(--at-prim-rose-950);
+  --at-color-status-fin-parcial-fg:   var(--at-prim-amber-400);
+  --at-color-status-fin-parcial-bg:   var(--at-prim-amber-950);
+  --at-color-status-fin-pago-fg:      var(--at-prim-emerald-400);
+  --at-color-status-fin-pago-bg:      var(--at-prim-emerald-900);
+  --at-color-status-fin-estornado-fg: var(--at-prim-slate-200);
+  --at-color-status-fin-estornado-bg: var(--at-prim-graphite-800);
+
+  /* Tipografia */
+  --at-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --at-font-mono: 'JetBrains Mono', 'Cascadia Mono', 'Consolas', monospace;
+  --at-font-xs:   0.75rem;
+  --at-font-sm:   0.8125rem;
+  --at-font-base: 0.875rem;
+  --at-font-md:   1rem;
+  --at-font-lg:   1.125rem;
+  --at-font-xl:   1.375rem;
+  --at-font-2xl:  1.625rem;
+  --at-font-3xl:  2rem;
+
+  /* Espaçamentos (4px) */
+  --at-space-1:  4px;
+  --at-space-2:  8px;
+  --at-space-3:  12px;
+  --at-space-4:  16px;
+  --at-space-5:  20px;
+  --at-space-6:  24px;
+  --at-space-8:  32px;
+  --at-space-12: 48px;
+
+  /* Raios, Elevação e Camadas */
+  --at-radius-sm:   4px;
+  --at-radius-md:   8px;
+  --at-radius-lg:   12px;
+  --at-radius-xl:   16px;
+  --at-radius-pill: 999px;
+
+  --at-shadow-md:      0 8px 24px rgba(0, 0, 0, 0.35);
+  --at-shadow-overlay: 0 20px 48px rgba(0, 0, 0, 0.55);
+
+  --at-z-sticky:  10;
+  --at-z-sidebar: 20;
+  --at-z-scrim:   30;
+  --at-z-dialog:  40;
+  --at-z-toast:   50;
+
+  --at-size-sidebar:       240px;
+  --at-size-mobile-header: 56px;
+
+  --at-duration-fast: 120ms;
+  --at-duration-base: 200ms;
+}

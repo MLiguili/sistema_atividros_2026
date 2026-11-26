@@ -1,0 +1,54 @@
+/* ==========================================================================
+   ESTILOS DA CALCULADORA DE QUADROS E VIDRO AVULSO
+   ========================================================================== */
+
+.at-calc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--at-space-4);
+  align-items: start;
+}
+
+.at-calc-result-total {
+  text-align: center;
+  padding: var(--at-space-4);
+  background-color: var(--at-color-bg-subtle);
+  border: 1px solid var(--at-color-border-subtle);
+  border-radius: var(--at-radius-md);
+  margin-bottom: var(--at-space-4);
+}
+
+.at-calc-result-total__valor {
+  font-size: var(--at-font-3xl);
+  font-weight: 700;
+  color: var(--at-color-text-brand);
+}
+
+.at-calc-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--at-space-2);
+  padding: var(--at-space-3);
+  background-color: var(--at-color-bg-subtle);
+  border: 1px solid var(--at-color-border-subtle);
+  border-radius: var(--at-radius-md);
+}
+
+.at-calc-list__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--at-space-2);
+}
+
+.at-calc-list__row--total {
+  padding-top: var(--at-space-2);
+  border-top: 1px solid var(--at-color-border-subtle);
+  font-weight: 700;
+}
+
+@media (max-width: 1023px) {
+  .at-calc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

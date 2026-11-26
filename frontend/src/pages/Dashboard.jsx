@@ -1,208 +1,229 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  AlertTriangle,
+  CalendarClock,
+  CheckCircle2,
+  CircleDollarSign,
+  FileEdit,
+  ShoppingCart,
+  TrendingUp,
+} from 'lucide-react';
 import api from '../api/config';
-import { Package, Users, ShoppingCart, TrendingUp, AlertCircle, CheckCircle, Calendar } from 'lucide-react';
+import Card from '../components/ui/Card';
+import StatCard from '../components/ui/StatCard';
+import Callout from '../components/ui/Callout';
+import EmptyState from '../components/ui/EmptyState';
+import { formatarAreaM2, formatarMoeda } from '../utils/formatadores';
 
+/**
+ * Painel operacional exibindo KPIs financeiros confiáveis, prazos e alertas de ruptura de estoque.
+ *
+ * @returns {JSX.Element} Página Dashboard.
+ */
 const Dashboard = () => {
-  const [resumo, setResumo] = useState({ molduras: 0, vidros: 0, fundos: 0, pedidos: 0, clientes: 0, receita: 0 });
-  const [pedidosHoje, setPedidosHoje] = useState([]);
-  const [alertasEstoque, setAlertasEstoque] = useState([]);
+  const [resumo, setResumo] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
 
   useEffect(() => {
-    const carregarDados = async () => {
+    const carregar = async () => {
       try {
-        const [m, v, f, p, c] = await Promise.all([
-          api.get('/estoque/molduras'),
-          api.get('/estoque/vidros'),
-          api.get('/estoque/fundos'),
-          api.get('/pedidos/'),
-          api.get('/clientes/')
-        ]);
-        
-        const totalReceita = p.data.reduce((acc, curr) => acc + parseFloat(curr.valor_total || 0), 0);
-        
-        const hoje = new Date().toISOString().split('T')[0];
-        const pedidosDeHoje = p.data.filter(pedido => 
-          pedido.criado_em && pedido.criado_em.startsWith(hoje)
-        );
-        const pedidosOrd = [...pedidosDeHoje].sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
-        
-        setResumo({
-          molduras: m.data.length,
-          vidros: v.data.length,
-          fundos: f.data.length,
-          pedidos: p.data.length,
-          clientes: c.data.length,
-          receita: totalReceita
-        });
-        setPedidosHoje(pedidosOrd);
-        
-        const alertas = [
-          ...m.data.filter(item => item.quantidade < 5).map(item => ({ ...item, tipo_item: 'moldura' })),
-          ...v.data.filter(item => item.quantidade < 3).map(item => ({ ...item, tipo_item: 'vidro' })),
-          ...f.data.filter(item => item.quantidade < 3).map(item => ({ ...item, tipo_item: 'fundo' }))
-        ];
-        setAlertasEstoque(alertas);
-      } catch (erro) {
-        console.error('Erro ao carregar dados:', erro);
+        const resp = await api.get('/dashboard/resumo');
+        setResumo(resp.data);
+      } catch (err) {
+        setErro(err.response?.data?.detail || 'Não foi possível carregar o resumo operacional.');
+      } finally {
+        setCarregando(false);
       }
     };
-    carregarDados();
+    carregar();
   }, []);
 
-  const getStatusBadge = (status, eixo) => {
-    const cores = {
-      geral: { rascunho: '#6b7280', confirmado: '#6366f1', cancelado: '#ef4444', entregue: '#22c55e', arquivado: '#9ca3af' },
-      producao: { pendente: '#f59e0b', aguardando_material: '#f97316', em_producao: '#8b5cf6', para_embalar: '#06b6d4', pronto_entrega: '#10b981', entregue: '#22c55e' },
-      financeiro: { sem_pagamento: '#ef4444', sinal_recebido: '#f59e0b', pago_total: '#22c55e', estornado: '#dc2626' }
-    };
-    const labels = {
-      geral: { rascunho: 'Rascunho', confirmado: 'Confirmado', cancelado: 'Cancelado', entregue: 'Entregue', arquivado: 'Arquivado' },
-      producao: { pendente: 'Pendente', aguardando_material: 'Aguard.', em_producao: 'Producao', para_embalar: 'Embalar', pronto_entrega: 'Pronto', entregue: 'Entregue' },
-      financeiro: { sem_pagamento: 'Sem Pgto', sinal_recebido: 'Sinal', pago_total: 'Pago', estornado: 'Estornado' }
-    };
+  if (carregando) {
     return (
-      <span style={{ 
-        background: cores[eixo]?.[status] || '#6b7280', 
-        color: 'white', 
-        padding: '2px 6px', 
-        borderRadius: '10px', 
-        fontSize: '0.65rem',
-        fontWeight: 500
-      }}>
-        {labels[eixo]?.[status] || status}
-      </span>
+      <div className="at-state" role="status">
+        Carregando painel operacional...
+      </div>
     );
-  };
+  }
 
-  const getNomeItem = (item) => {
-    if (item.tipo_item === 'moldura') return item.codigo || 'Moldura';
-    if (item.tipo_item === 'vidro') return `${item.tipo} ${item.espessura}mm`;
-    if (item.tipo_item === 'fundo') return `${item.tipo} ${item.espessura}mm`;
-    return 'Item';
-  };
+  if (erro || !resumo) {
+    return (
+      <div>
+        <header className="at-page-header">
+          <h1>Painel Geral</h1>
+        </header>
+        <Callout variant="danger">{erro || 'Erro ao carregar dados.'}</Callout>
+      </div>
+    );
+  }
+
+  const { alertas_estoque: alertas } = resumo;
+  const totalCriticos =
+    (alertas?.molduras_criticas?.length || 0) +
+    (alertas?.vidros_criticos?.length || 0) +
+    (alertas?.fundos_criticos?.length || 0);
 
   return (
-    <div className="dashboard-wrapper">
-      <header className="page-header">
+    <div>
+      <header className="at-page-header">
         <div>
           <h1>Painel Geral</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Bem-vindo de volta! Aqui está o resumo da Atividros hoje.</p>
+          <p className="at-page-header__subtitle">
+            Resumo financeiro confirmado, prazos de entrega e alertas de estoque da loja.
+          </p>
+        </div>
+        <div className="at-page-header__actions">
+          <Link to="/calculadora" className="at-btn at-btn--secondary">
+            Abrir Calculadora
+          </Link>
+          <Link to="/pedidos" className="at-btn at-btn--primary">
+            Gerenciar Pedidos
+          </Link>
         </div>
       </header>
 
-      <div className="stats-grid" style={{ marginBottom: 'var(--spacing-lg)' }}>
-        <StatCard icone={<Package size={24} color="#10b981" />} rotulo="Molduras" valor={resumo.molduras} cor="#10b981" />
-        <StatCard icone={<Package size={24} color="#3b82f6" />} rotulo="Vidros" valor={resumo.vidros} cor="#3b82f6" />
-        <StatCard icone={<Package size={24} color="#f59e0b" />} rotulo="Fundos" valor={resumo.fundos} cor="#f59e0b" />
-        <StatCard icone={<ShoppingCart size={24} color="#8b5cf6" />} rotulo="Pedidos" valor={resumo.pedidos} cor="#8b5cf6" />
-        <StatCard icone={<Users size={24} color="#6366f1" />} rotulo="Clientes" valor={resumo.clientes} cor="#6366f1" />
-        <StatCard icone={<TrendingUp size={24} color="#ec4899" />} rotulo="Receita" valor={`R$ ${resumo.receita.toFixed(2)}`} cor="#ec4899" />
+      <div className="at-stats-grid">
+        <StatCard
+          icon={<TrendingUp size={20} aria-hidden="true" />}
+          label="Receita Confirmada"
+          value={formatarMoeda(resumo.receita_confirmada)}
+          tone="brand"
+        />
+        <StatCard
+          icon={<CircleDollarSign size={20} aria-hidden="true" />}
+          label="Saldo a Receber"
+          value={formatarMoeda(resumo.total_a_receber)}
+          tone="warning"
+        />
+        <StatCard
+          icon={<ShoppingCart size={20} aria-hidden="true" />}
+          label="Pedidos Ativos"
+          value={resumo.pedidos_ativos}
+          tone="info"
+        />
+        <StatCard
+          icon={<FileEdit size={20} aria-hidden="true" />}
+          label="Orçamentos Abertos"
+          value={resumo.orcamentos_abertos}
+          tone="info"
+        />
+        <StatCard
+          icon={<CalendarClock size={20} aria-hidden="true" />}
+          label="Prazos Vencidos"
+          value={resumo.pedidos_prazo_vencido}
+          tone={resumo.pedidos_prazo_vencido > 0 ? 'danger' : 'brand'}
+        />
+        <StatCard
+          icon={<CalendarClock size={20} aria-hidden="true" />}
+          label="Vencendo Hoje"
+          value={resumo.pedidos_vencendo_hoje}
+          tone={resumo.pedidos_vencendo_hoje > 0 ? 'warning' : 'brand'}
+        />
       </div>
 
-      <div className="grid-2">
-        <div className="card">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-            <Calendar size={18} /> Pedidos de Hoje
-          </h3>
-          {pedidosHoje.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {pedidosHoje.map(pedido => (
-                <div key={pedido.id} style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  padding: '0.75rem', 
-                  background: 'rgba(255,255,255,0.02)', 
-                  borderRadius: '8px' 
-                }}>
-                  <div>
-                    <p style={{ fontWeight: 500 }}>#{pedido.numero_pedido}</p>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                      {pedido.cliente?.nome || 'Cliente'} {pedido.cliente?.sobrenome || ''}
-                    </p>
-                    <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.25rem' }}>
-                      {getStatusBadge(pedido.status_geral, 'geral')}
-                      {getStatusBadge(pedido.status_producao, 'producao')}
+      <div className="at-grid-2">
+        <Card>
+          <div className="at-card__header">
+            <h2>Movimento e Prazos</h2>
+            <span className="at-muted at-num">{resumo.pedidos_hoje} criados hoje</span>
+          </div>
+
+          {resumo.pedidos_prazo_vencido > 0 && (
+            <Callout variant="danger">
+              Há <strong className="at-num">{resumo.pedidos_prazo_vencido}</strong> pedido(s) confirmado(s) com prazo de entrega vencido.
+            </Callout>
+          )}
+          {resumo.pedidos_vencendo_hoje > 0 && (
+            <Callout variant="warning">
+              <strong className="at-num">{resumo.pedidos_vencendo_hoje}</strong> pedido(s) vencem hoje na oficina.
+            </Callout>
+          )}
+          {resumo.pedidos_prazo_vencido === 0 && resumo.pedidos_vencendo_hoje === 0 && (
+            <EmptyState
+              icon={<CheckCircle2 size={32} aria-hidden="true" />}
+              title="Prazos sob controle"
+              description="Nenhum pedido ativo está atrasado ou vencendo hoje."
+            />
+          )}
+        </Card>
+
+        <Card>
+          <div className="at-card__header">
+            <h2>Estoque Crítico e Rupturas</h2>
+            <Link to="/estoque" className="at-btn at-btn--ghost at-btn--sm">
+              Ver Estoque
+            </Link>
+          </div>
+
+          {totalCriticos === 0 ? (
+            <EmptyState
+              icon={<CheckCircle2 size={32} aria-hidden="true" />}
+              title="Estoque em dia"
+              description="Nenhuma moldura, vidro ou fundo abaixo do mínimo configurado."
+            />
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--at-space-2)' }}>
+              {alertas.molduras_criticas.map((m) => (
+                <div
+                  key={`m-${m.id}`}
+                  className={`at-baixa-row ${m.quantidade < 0 ? 'at-baixa-row--ruptura' : ''}`.trim()}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }}>
+                    <AlertTriangle size={16} aria-hidden="true" />
+                    <div>
+                      <strong>Moldura {m.codigo}</strong> <span className="at-muted">({m.cor})</span>
+                      <p className="at-field__hint at-num">Mínimo: {m.estoque_minimo} barras</p>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>
-                      R$ {parseFloat(pedido.valor_total || 0).toFixed(2)}
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      {new Date(pedido.criado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
+                  <strong className="at-num">
+                    {m.quantidade} {m.quantidade === 1 || m.quantidade === -1 ? 'barra' : 'barras'}
+                  </strong>
                 </div>
               ))}
-            </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', padding: '2rem', justifyContent: 'center' }}>
-              <CheckCircle size={20} /> Nenhum pedido hoje
-            </div>
-          )}
-        </div>
 
-        <div className="card">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-            <AlertCircle size={18} color="#ef4444" /> Estoque Critico
-          </h3>
-          {alertasEstoque.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {alertasEstoque.map(item => (
-                <div key={`${item.tipo_item}-${item.id}`} style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '0.75rem', 
-                  padding: '0.75rem', 
-                  background: 'rgba(239,68,68,0.1)', 
-                  borderRadius: '8px', 
-                  border: '1px solid rgba(239,68,68,0.2)' 
-                }}>
-                  <AlertCircle size={18} color="#ef4444" />
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontWeight: 500 }}>{getNomeItem(item)}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
-                      {item.tipo_item}
-                    </p>
+              {alertas.vidros_criticos.map((v) => (
+                <div
+                  key={`v-${v.id}`}
+                  className={`at-baixa-row ${Number(v.area_disponivel_m2) < 0 ? 'at-baixa-row--ruptura' : ''}`.trim()}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }}>
+                    <AlertTriangle size={16} aria-hidden="true" />
+                    <div>
+                      <strong>
+                        Vidro {v.tipo} {v.espessura}mm
+                      </strong>
+                      <p className="at-field__hint at-num">Mínimo: {formatarAreaM2(v.estoque_minimo_m2)}</p>
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontWeight: 600, color: '#ef4444' }}>{item.quantidade} un</p>
-                    <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Baixo</p>
+                  <strong className="at-num">{formatarAreaM2(v.area_disponivel_m2)}</strong>
+                </div>
+              ))}
+
+              {alertas.fundos_criticos.map((f) => (
+                <div
+                  key={`f-${f.id}`}
+                  className={`at-baixa-row ${Number(f.area_disponivel_m2) < 0 ? 'at-baixa-row--ruptura' : ''}`.trim()}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }}>
+                    <AlertTriangle size={16} aria-hidden="true" />
+                    <div>
+                      <strong>
+                        Fundo {f.tipo} {f.espessura}mm
+                      </strong>
+                      <p className="at-field__hint at-num">Mínimo: {formatarAreaM2(f.estoque_minimo_m2)}</p>
+                    </div>
                   </div>
+                  <strong className="at-num">{formatarAreaM2(f.area_disponivel_m2)}</strong>
                 </div>
               ))}
             </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', padding: '2rem', justifyContent: 'center' }}>
-              <CheckCircle size={20} color="#10b981" /> Estoque OK
-            </div>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );
 };
-
-const StatCard = ({ icone, rotulo, valor, cor }) => (
-  <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem' }}>
-    <div style={{ 
-      width: '40px', 
-      height: '40px', 
-      borderRadius: '10px', 
-      backgroundColor: `rgba(${parseInt(cor.slice(1,3), 16)}, ${parseInt(cor.slice(3,5), 16)}, ${parseInt(cor.slice(5,7), 16)}, 0.1)`, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      flexShrink: 0
-    }}>
-      {icone}
-    </div>
-    <div>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '0.15rem' }}>{rotulo}</p>
-      <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{valor}</p>
-    </div>
-  </div>
-);
 
 export default Dashboard;

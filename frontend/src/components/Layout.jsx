@@ -1,300 +1,116 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Box, Users, ShoppingCart, LogOut, Calculator, Menu, X } from 'lucide-react';
+import {
+  Box,
+  Calculator,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  ShoppingCart,
+  Tags,
+  Users,
+  X,
+} from 'lucide-react';
 import { useAutenticacao } from '../context/ContextoAutenticacao';
+import Button from './ui/Button';
 
+/**
+ * Item de navegação lateral com fechamento automático do drawer mobile.
+ *
+ * @param {{ to: string, icon: React.ReactNode, label: string, onSelect: () => void }} props Propriedades.
+ * @returns {JSX.Element} Link de navegação.
+ */
+const NavItem = ({ to, icon, label, onSelect }) => (
+  <NavLink
+    to={to}
+    end={to === '/'}
+    onClick={onSelect}
+    className={({ isActive }) => `at-nav-link ${isActive ? 'active' : ''}`.trim()}
+  >
+    {icon}
+    <span>{label}</span>
+  </NavLink>
+);
+
+/**
+ * Shell principal do aplicativo com navegação lateral responsiva (Balcão + Oficina).
+ *
+ * @param {{ children: React.ReactNode }} props Conteúdo da rota ativa.
+ * @returns {JSX.Element} Layout completo da aplicação.
+ */
 const Layout = ({ children }) => {
   const { usuario, logout } = useAutenticacao();
   const navegar = useNavigate();
   const [menuAberto, setMenuAberto] = useState(false);
+
+  useEffect(() => {
+    const aoPressionarEsc = (evento) => {
+      if (evento.key === 'Escape') setMenuAberto(false);
+    };
+    window.addEventListener('keydown', aoPressionarEsc);
+    return () => window.removeEventListener('keydown', aoPressionarEsc);
+  }, []);
 
   const handleLogout = () => {
     logout();
     navegar('/login');
   };
 
-  const toggleMenu = () => setMenuAberto(!menuAberto);
-
   return (
-    <div className="layout-root">
-      {/* Mobile Header */}
-      <header className="mobile-header">
-        <button className="menu-toggle" onClick={toggleMenu}>
-          {menuAberto ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        <span className="mobile-logo">ATIVIDROS</span>
-        <div style={{ width: 40 }} />
+    <div className="at-app">
+      <header className="at-mobile-header">
+        <Button
+          variant="icon"
+          onClick={() => setMenuAberto((v) => !v)}
+          aria-expanded={menuAberto}
+          aria-controls="at-sidebar-nav"
+          aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
+        >
+          {menuAberto ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+        </Button>
+        <span className="at-brand">ATIVIDROS</span>
+        <div style={{ width: '44px' }} aria-hidden="true" />
       </header>
 
-      {/* Overlay para mobile */}
-      {menuAberto && <div className="menu-overlay" onClick={() => setMenuAberto(false)} />}
+      {menuAberto && <div className="at-scrim" onClick={() => setMenuAberto(false)} aria-hidden="true" />}
 
-      {/* Sidebar - Desktop e Mobile */}
-      <aside className={`sidebar ${menuAberto ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h2 className="sidebar-logo">ATIVIDROS</h2>
-          <span className="sidebar-subtitle">SISTEMA DE GESTÃO v1</span>
+      <aside id="at-sidebar-nav" className={`at-sidebar ${menuAberto ? 'at-sidebar--open' : ''}`.trim()}>
+        <div className="at-sidebar__header">
+          <span className="at-brand">ATIVIDROS</span>
+          <span className="at-brand-sub">Sistema de Gestão V1.0</span>
         </div>
 
-        <nav className="sidebar-nav">
-          <MenuItem to="/" icone={<LayoutDashboard size={20} />} texto="Dashboard" onClick={() => setMenuAberto(false)} />
-          <MenuItem to="/estoque" icone={<Box size={20} />} texto="Estoque" onClick={() => setMenuAberto(false)} />
-          <MenuItem to="/clientes" icone={<Users size={20} />} texto="Clientes" onClick={() => setMenuAberto(false)} />
-          <MenuItem to="/pedidos" icone={<ShoppingCart size={20} />} texto="Pedidos" onClick={() => setMenuAberto(false)} />
-          <MenuItem to="/calculadora" icone={<Calculator size={20} />} texto="Calculadora" onClick={() => setMenuAberto(false)} />
+        <nav className="at-sidebar__nav" aria-label="Menu principal">
+          <NavItem to="/" icon={<LayoutDashboard size={18} aria-hidden="true" />} label="Dashboard" onSelect={() => setMenuAberto(false)} />
+          <NavItem to="/pedidos" icon={<ShoppingCart size={18} aria-hidden="true" />} label="Pedidos" onSelect={() => setMenuAberto(false)} />
+          <NavItem to="/calculadora" icon={<Calculator size={18} aria-hidden="true" />} label="Calculadora" onSelect={() => setMenuAberto(false)} />
+          <NavItem to="/estoque" icon={<Box size={18} aria-hidden="true" />} label="Estoque" onSelect={() => setMenuAberto(false)} />
+          <NavItem to="/precos" icon={<Tags size={18} aria-hidden="true" />} label="Tabelas de Preço" onSelect={() => setMenuAberto(false)} />
+          <NavItem to="/clientes" icon={<Users size={18} aria-hidden="true" />} label="Clientes" onSelect={() => setMenuAberto(false)} />
         </nav>
 
-        <div className="sidebar-footer">
-          <div className="user-info">
-            <div className="user-avatar">
-              {usuario?.nome_usuario?.[0]?.toUpperCase()}
+        <div className="at-sidebar__footer">
+          <div className="at-user-chip">
+            <div className="at-user-avatar" aria-hidden="true">
+              {usuario?.nome_usuario?.[0]?.toUpperCase() || 'A'}
             </div>
-            <div className="user-details">
-              <p className="user-name">{usuario?.nome_completo || usuario?.nome_usuario}</p>
-              <p className="user-role">Administrador</p>
+            <div>
+              <p className="at-user-name">{usuario?.nome_completo || usuario?.nome_usuario || 'Operador'}</p>
+              <p className="at-user-role">Loja Atividros</p>
             </div>
           </div>
-          <button className="btn btn-glass logout-btn" onClick={handleLogout}>
-            <LogOut size={18} /> <span className="hide-mobile">Sair</span>
-          </button>
+          <Button variant="secondary" size="sm" onClick={handleLogout}>
+            <LogOut size={16} aria-hidden="true" />
+            <span>Sair</span>
+          </Button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="main-content">
-        <div className="container fade-in">
-          {children}
-        </div>
+      <main className="at-main">
+        <div className="at-container">{children}</div>
       </main>
-
-      <style>{`
-        .layout-root {
-          display: flex;
-          min-height: 100vh;
-          background-color: var(--bg-primary);
-        }
-
-        /* Mobile Header */
-        .mobile-header {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 60px;
-          background: var(--bg-secondary);
-          border-bottom: 1px solid var(--glass-border);
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 1rem;
-          z-index: 100;
-        }
-
-        .menu-toggle {
-          background: none;
-          border: none;
-          color: var(--text-primary);
-          cursor: pointer;
-          padding: 0.5rem;
-        }
-
-        .mobile-logo {
-          color: var(--accent-primary);
-          font-weight: 700;
-          font-size: 1.25rem;
-          letter-spacing: 1px;
-        }
-
-        /* Sidebar */
-        .sidebar {
-          width: var(--sidebar-width);
-          background-color: var(--bg-secondary);
-          border-right: 1px solid var(--glass-border);
-          display: flex;
-          flex-direction: column;
-          padding: 2rem 1.25rem;
-          position: fixed;
-          height: 100vh;
-          z-index: 200;
-          transition: transform 0.3s ease;
-        }
-        
-        .sidebar:hover {
-          box-shadow: 4px 0 24px rgba(0,0,0,0.2);
-        }
-        
-        .sidebar-logo {
-          font-size: 1.75rem;
-          font-weight: 700;
-          letter-spacing: 2px;
-          margin-bottom: 0.5rem;
-          background: linear-gradient(135deg, var(--accent-primary) 0%, #34d399 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .sidebar-header {
-          margin-bottom: 2rem;
-          padding: 0 0.5rem;
-        }
-
-        .sidebar-logo {
-          color: var(--accent-primary);
-          font-size: 1.5rem;
-          letter-spacing: 1px;
-          margin-bottom: 0.25rem;
-        }
-
-        .sidebar-subtitle {
-          font-size: 0.75rem;
-          color: var(--text-secondary);
-        }
-
-        .sidebar-nav {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .sidebar-item {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          border-radius: 8px;
-          color: var(--text-secondary);
-          text-decoration: none;
-          transition: all 0.2s ease;
-        }
-
-        .sidebar-item:hover {
-          background-color: rgba(255, 255, 255, 0.05);
-          color: var(--text-primary);
-        }
-
-        .sidebar-item.active {
-          background-color: rgba(16, 185, 129, 0.15);
-          color: var(--accent-primary);
-          font-weight: 500;
-        }
-
-        .sidebar-footer {
-          border-top: 1px solid var(--glass-border);
-          padding-top: 1rem;
-        }
-
-        .user-info {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-          padding: 0 0.5rem;
-        }
-
-        .user-avatar {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background-color: var(--accent-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          font-size: 0.9rem;
-        }
-
-        .user-details {
-          flex: 1;
-        }
-
-        .user-name {
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-
-        .user-role {
-          font-size: 0.75rem;
-          color: var(--text-secondary);
-        }
-
-        .logout-btn {
-          width: 100%;
-          justify-content: flex-start;
-          padding: 0.75rem;
-        }
-
-        /* Main Content */
-        .main-content {
-          flex: 1;
-          margin-left: var(--sidebar-width);
-          padding: var(--spacing-lg);
-          min-height: 100vh;
-        }
-
-        /* Menu Overlay */
-        .menu-overlay {
-          display: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 767px) {
-          .mobile-header {
-            display: flex;
-          }
-
-          .main-content {
-            margin-left: 0;
-            padding: 1rem;
-            padding-top: 80px;
-          }
-
-          .sidebar {
-            transform: translateX(-100%);
-            width: 280px;
-            padding-top: 80px;
-          }
-
-          .sidebar.open {
-            transform: translateX(0);
-          }
-
-          .menu-overlay {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 150;
-          }
-
-          .hide-mobile {
-            display: none;
-          }
-        }
-
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .main-content {
-            padding: var(--spacing-md);
-          }
-        }
-      `}</style>
     </div>
   );
 };
-
-const MenuItem = ({ to, icone, texto, onClick }) => (
-  <NavLink 
-    to={to} 
-    className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
-    onClick={onClick}
-  >
-    {icone}
-    <span>{texto}</span>
-  </NavLink>
-);
 
 export default Layout;
