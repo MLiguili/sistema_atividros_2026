@@ -205,6 +205,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-/.idea/atividros.iml
-/backend/atividros.db
-/backend/migrations/versions/baf432e819f5_adicionando_modelos_de_pedidos.py
+
+# IDE, bancos locais e build do frontend
+.idea/
+*.db
+*.sqlite
+*.sqlite3
+frontend/dist/

@@ -19,7 +19,10 @@ async def login(
     dados_form: OAuth2PasswordRequestForm = Depends(),
     db: AsyncSession = Depends(obter_db)
 ):
-    logger.debug("Tentativa de login para usuario: %s", dados_form.username, dados_form.password)
+    """
+    Autentica o usuário com nome de usuário e senha e retorna um token JWT.
+    """
+    logger.debug("Tentativa de login para usuario: %s", dados_form.username)
     resultado = await db.execute(select(Usuario).where(Usuario.nome_usuario == dados_form.username))
     usuario = resultado.scalar_one_or_none()
 

@@ -37,7 +37,10 @@ async def criar_moldura(obj_in: CriarMoldura, db: AsyncSession = Depends(obter_d
     return db_obj
 
 @router.get("/molduras", response_model=list[RespostaMoldura])
-async def listar_molduras(db: AsyncSession = Depends(obter_db)):
+async def listar_molduras(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista todas as molduras cadastradas no estoque.
+    """
     resultado = await db.execute(select(Moldura))
     return resultado.scalars().all()
 
@@ -80,12 +83,18 @@ async def criar_vidro(obj_in: CriarVidro, db: AsyncSession = Depends(obter_db), 
     return db_obj
 
 @router.get("/vidros", response_model=list[RespostaVidro])
-async def listar_vidros(db: AsyncSession = Depends(obter_db)):
+async def listar_vidros(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista todos os vidros cadastrados no estoque.
+    """
     resultado = await db.execute(select(Vidro))
     return resultado.scalars().all()
 
 @router.get("/vidros/{item_id}", response_model=RespostaVidro)
-async def obter_vidro(item_id: int, db: AsyncSession = Depends(obter_db)):
+async def obter_vidro(item_id: int, db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Obtém um vidro específico pelo ID.
+    """
     resultado = await db.execute(select(Vidro).where(Vidro.id == item_id))
     obj = resultado.scalar_one_or_none()
     if not obj:
@@ -126,12 +135,18 @@ async def criar_fundo(obj_in: CriarFundo, db: AsyncSession = Depends(obter_db), 
     return db_obj
 
 @router.get("/fundos", response_model=list[RespostaFundo])
-async def listar_fundos(db: AsyncSession = Depends(obter_db)):
+async def listar_fundos(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista todos os fundos cadastrados no estoque.
+    """
     resultado = await db.execute(select(Fundo))
     return resultado.scalars().all()
 
 @router.get("/fundos/{item_id}", response_model=RespostaFundo)
-async def obter_fundo(item_id: int, db: AsyncSession = Depends(obter_db)):
+async def obter_fundo(item_id: int, db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Obtém um fundo específico pelo ID.
+    """
     resultado = await db.execute(select(Fundo).where(Fundo.id == item_id))
     obj = resultado.scalar_one_or_none()
     if not obj:
@@ -172,7 +187,10 @@ async def criar_suplemento(obj_in: CriarSuplemento, db: AsyncSession = Depends(o
     return db_obj
 
 @router.get("/suplementos", response_model=list[RespostaSuplemento])
-async def listar_suplementos(db: AsyncSession = Depends(obter_db)):
+async def listar_suplementos(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista todos os suplementos cadastrados no estoque.
+    """
     resultado = await db.execute(select(Suplemento))
     return resultado.scalars().all()
 

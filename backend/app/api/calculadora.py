@@ -53,7 +53,10 @@ async def simular_calculo(
 
 # Tabela de Preços de Vidro
 @router.get("/tabela-vidro", response_model=list[RespostaTabelaPrecoVidro])
-async def listar_tabela_vidro(db: AsyncSession = Depends(obter_db)):
+async def listar_tabela_vidro(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista a tabela de preços de vidro por m².
+    """
     resultado = await db.execute(select(TabelaPrecoVidro))
     return resultado.scalars().all()
 
@@ -82,7 +85,10 @@ async def atualizar_preco_vidro(preco_id: int, obj_in: AtualizarTabelaPrecoVidro
 
 # Tabela de Preços de Paspatour
 @router.get("/tabela-paspatour", response_model=list[RespostaTabelaPrecoPaspatour])
-async def listar_tabela_paspatour(db: AsyncSession = Depends(obter_db)):
+async def listar_tabela_paspatour(db: AsyncSession = Depends(obter_db), _=Depends(obter_usuario_atual)):
+    """
+    Lista a tabela de preços de paspatour por m².
+    """
     resultado = await db.execute(select(TabelaPrecoPaspatour))
     return resultado.scalars().all()
 
