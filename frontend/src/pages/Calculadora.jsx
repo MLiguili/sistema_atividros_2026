@@ -5,6 +5,7 @@ import { useToast } from '../context/ContextoToast';
 import Callout from '../components/ui/Callout';
 import FormComposicaoQuadro from '../components/calculadora/FormComposicaoQuadro';
 import PainelResultadoCalculo from '../components/calculadora/PainelResultadoCalculo';
+import { resolverEstoquePorTipo } from '../utils/formatadores';
 
 const ESTADO_INICIAL = {
   obra_largura: '50',
@@ -65,11 +66,16 @@ const Calculadora = () => {
           tabelaFundo: tf.data || [],
           tabelaPaspatour,
         });
-        setDados((atual) => ({
-          ...atual,
-          vidro_tipo: atual.vidro_tipo || tabelaVidro[0]?.tipo || '',
-          paspatour_id: atual.paspatour_id || (tabelaPaspatour[0] ? String(tabelaPaspatour[0].id) : ''),
-        }));
+        setDados((atual) => {
+          const vidroTipoIni = atual.vidro_tipo || tabelaVidro[0]?.tipo || '';
+          const chapaVidro = resolverEstoquePorTipo(v.data || [], vidroTipoIni);
+          return {
+            ...atual,
+            vidro_tipo: vidroTipoIni,
+            vidro_id: atual.vidro_id || (chapaVidro ? String(chapaVidro.id) : ''),
+            paspatour_id: atual.paspatour_id || (tabelaPaspatour[0] ? String(tabelaPaspatour[0].id) : ''),
+          };
+        });
       } catch (err) {
         notificar(err.response?.data?.detail || 'Erro ao carregar catálogos da calculadora.', 'danger');
       }

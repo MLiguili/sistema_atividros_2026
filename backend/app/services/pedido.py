@@ -3,12 +3,12 @@ from datetime import UTC, date, datetime, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.models.cliente import Cliente
-from app.models.estoque import Fundo, Moldura, Vidro
+from app.models.estoque import Fundo, Moldura, TipoVidro, Vidro
 from app.models.pedido import (
     Eixo,
     ItemPedido,
@@ -175,6 +175,39 @@ async def carregar_pedido_completo(pedido_id: int, db: AsyncSession) -> Pedido:
     return pedido
 
 
+async def _resolver_vidro_id_por_tipo(vidro_tipo: str | None, db: AsyncSession) -> int | None:
+    """
+    Localiza automaticamente a chapa de vidro no estoque correspondente ao tipo informado.
+    """
+    if not vidro_tipo:
+        return None
+    tipo_limpo = vidro_tipo.strip().lower()
+    if tipo_limpo not in {t.value for t in TipoVidro}:
+        return None
+    res = await db.execute(
+        select(Vidro.id)
+        .where(Vidro.tipo == TipoVidro(tipo_limpo))
+        .order_by(Vidro.area_disponivel_m2.desc(), Vidro.id.asc())
+        .limit(1)
+    )
+    return res.scalar_one_or_none()
+
+
+async def _resolver_fundo_id_por_tipo(fundo_tipo: str | None, db: AsyncSession) -> int | None:
+    """
+    Localiza automaticamente a chapa de fundo no estoque correspondente ao tipo informado.
+    """
+    if not fundo_tipo:
+        return None
+    res = await db.execute(
+        select(Fundo.id)
+        .where(func.lower(Fundo.tipo) == fundo_tipo.strip().lower())
+        .order_by(Fundo.area_disponivel_m2.desc(), Fundo.id.asc())
+        .limit(1)
+    )
+    return res.scalar_one_or_none()
+
+
 async def _construir_item_pedido(item_in: CriarItemPedido, db: AsyncSession) -> ItemPedido:
     """
     Executa o motor único de cálculo (quando aplicável) e monta a entidade ItemPedido com snapshot.
@@ -249,10 +282,18 @@ async def _construir_item_pedido(item_in: CriarItemPedido, db: AsyncSession) -> 
         tipo_v = res_v.scalar_one_or_none()
         vidro_tipo_resolvido = tipo_v.value if tipo_v else None
 
+    vidro_id_resolvido = item_in.vidro_id
+    if vidro_id_resolvido is None and vidro_tipo_resolvido:
+        vidro_id_resolvido = await _resolver_vidro_id_por_tipo(vidro_tipo_resolvido, db)
+
     fundo_tipo_resolvido = item_in.fundo_tipo
     if not fundo_tipo_resolvido and item_in.fundo_id is not None:
         res_f = await db.execute(select(Fundo.tipo).where(Fundo.id == item_in.fundo_id))
         fundo_tipo_resolvido = res_f.scalar_one_or_none()
+
+    fundo_id_resolvido = item_in.fundo_id
+    if fundo_id_resolvido is None and fundo_tipo_resolvido:
+        fundo_id_resolvido = await _resolver_fundo_id_por_tipo(fundo_tipo_resolvido, db)
 
     item_db = ItemPedido(
         tipo_item=item_in.tipo_item,
@@ -266,9 +307,9 @@ async def _construir_item_pedido(item_in: CriarItemPedido, db: AsyncSession) -> 
         paspatour=item_in.paspatour,
         tamanho_paspatour=item_in.tamanho_paspatour if item_in.paspatour else Decimal("0.00"),
         paspatour_id=item_in.paspatour_id,
-        vidro_id=item_in.vidro_id,
+        vidro_id=vidro_id_resolvido,
         vidro_tipo=vidro_tipo_resolvido,
-        fundo_id=item_in.fundo_id,
+        fundo_id=fundo_id_resolvido,
         fundo_tipo=fundo_tipo_resolvido,
         mao_de_obra=arredondar_2(item_in.mao_de_obra),
         snapshot_calculo=resultado.model_dump(mode="json"),
@@ -596,6 +637,34 @@ def _extrair_area_real_item_m2(item: ItemPedido) -> Decimal:
     return Decimal("0.0000")
 
 
+def _coletar_materiais_para_compra(pedido: Pedido) -> list[str]:
+    """
+    Identifica materiais com tipo definido no pedido porém sem chapa física cadastrada no estoque.
+    """
+    vidros_sem_estoque: dict[str, Decimal] = {}
+    fundos_sem_estoque: dict[str, Decimal] = {}
+
+    for item in pedido.itens:
+        area_total_m2 = arredondar_4(_extrair_area_real_item_m2(item) * Decimal(item.quantidade))
+        if area_total_m2 <= Decimal("0.0000"):
+            continue
+
+        if item.vidro_tipo and item.vidro_id is None:
+            chave_v = item.vidro_tipo.strip()
+            vidros_sem_estoque[chave_v] = arredondar_4(vidros_sem_estoque.get(chave_v, Decimal("0.0000")) + area_total_m2)
+
+        if item.fundo_tipo and item.fundo_id is None:
+            chave_f = item.fundo_tipo.strip()
+            fundos_sem_estoque[chave_f] = arredondar_4(fundos_sem_estoque.get(chave_f, Decimal("0.0000")) + area_total_m2)
+
+    mensagens: list[str] = []
+    for tipo_v, area in vidros_sem_estoque.items():
+        mensagens.append(f"Vidro '{tipo_v}' ({area} m²) não cadastrado no estoque — precisa ser comprado.")
+    for tipo_f, area in fundos_sem_estoque.items():
+        mensagens.append(f"Fundo '{tipo_f}' ({area} m²) não cadastrado no estoque — precisa ser comprado.")
+    return mensagens
+
+
 def _agrupar_insumos_pedido(pedido: Pedido) -> tuple[dict[int, dict], dict[int, dict], dict[int, dict]]:
     """
     Agrupa consumo previsto por moldura_id (barras), vidro_id (m² reais) e fundo_id (m² reais).
@@ -693,12 +762,14 @@ async def obter_previsao_baixa_estoque(pedido_id: int, db: AsyncSession) -> Resp
             )
         )
 
+    materiais_compra = _coletar_materiais_para_compra(pedido)
     possui_insumos = bool(molduras_prev or vidros_prev or fundos_prev)
     return RespostaPrevisaoBaixa(
         possui_insumos_estoque=possui_insumos,
         molduras=molduras_prev,
         vidros=vidros_prev,
         fundos=fundos_prev,
+        materiais_para_compra=materiais_compra,
     )
 
 
@@ -790,6 +861,12 @@ async def realizar_baixa_estoque_assistida(
             logger.warning("Ruptura na baixa pedido %s: %s", pedido.numero_pedido, msg)
 
     pedido.status_producao = StatusProducao.em_producao
+
+    materiais_compra = _coletar_materiais_para_compra(pedido)
+    for msg_compra in materiais_compra:
+        alertas_ruptura.append(msg_compra)
+        resumos_evento.append(msg_compra)
+        logger.warning("Material sem cadastro em estoque pedido %s: %s", pedido.numero_pedido, msg_compra)
 
     obs_usuario = dados.observacao.strip() if dados and dados.observacao else None
     obs_producao = obs_usuario or "Produção iniciada via Baixa Assistida"

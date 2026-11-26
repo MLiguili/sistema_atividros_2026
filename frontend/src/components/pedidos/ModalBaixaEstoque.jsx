@@ -63,10 +63,12 @@ const ModalBaixaEstoque = ({ open, onClose, pedido, onConfirmado }) => {
     return { ...m, barras_baixar: baixar, saldo_projetado_live: saldoProj, em_ruptura_live: saldoProj < 0 };
   });
 
+  const temMateriaisCompra = (previsao?.materiais_para_compra || []).length > 0;
   const haRuptura =
     moldurasComProjecao.some((m) => m.em_ruptura_live) ||
     (previsao?.vidros || []).some((v) => v.em_ruptura) ||
-    (previsao?.fundos || []).some((f) => f.em_ruptura);
+    (previsao?.fundos || []).some((f) => f.em_ruptura) ||
+    temMateriaisCompra;
 
   const confirmarBaixa = async () => {
     setEnviando(true);
@@ -118,9 +120,20 @@ const ModalBaixaEstoque = ({ open, onClose, pedido, onConfirmado }) => {
         <p className="at-muted">Calculando consumo previsto de materiais...</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--at-space-4)' }}>
-          {!previsao.possui_insumos_estoque && (
+          {!previsao.possui_insumos_estoque && !temMateriaisCompra && (
             <Callout variant="info">
               Este pedido não possui insumos vinculados ao estoque físico. Confirmar apenas moverá o pedido para Em Produção.
+            </Callout>
+          )}
+
+          {temMateriaisCompra && (
+            <Callout variant="warning">
+              <strong>Compra de Material Necessária:</strong>
+              <ul style={{ margin: '6px 0 0 18px' }}>
+                {previsao.materiais_para_compra.map((msg, idx) => (
+                  <li key={idx}>{msg}</li>
+                ))}
+              </ul>
             </Callout>
           )}
 

@@ -33,6 +33,7 @@ describe('ModalBaixaEstoque', () => {
         ],
         vidros: [],
         fundos: [],
+        materiais_para_compra: ["Fundo 'Foam Board' (0.4000 m²) não cadastrado no estoque — precisa ser comprado."],
       },
     });
     api.post.mockResolvedValueOnce({
@@ -53,6 +54,7 @@ describe('ModalBaixaEstoque', () => {
     );
 
     expect(await screen.findByText(/MLD-001 — Preto/)).toBeInTheDocument();
+    expect(screen.getByText(/compra de material necessária/i)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /aumentar barras de MLD-001/i }));
 
     expect(await screen.findByText(/ruptura de estoque projetada/i)).toBeInTheDocument();

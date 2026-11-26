@@ -267,8 +267,10 @@ const PedidoDetalhe = ({
             <div className="at-timeline">
               {(pedido.eventos || []).map((ev) => (
                 <div key={ev.id} className="at-timeline__item">
-                  <strong>{ev.tipo_evento}</strong>
-                  {ev.descricao && <div className="at-secondary">{ev.descricao}</div>}
+                  <strong>
+                    {ev.eixo}: {ev.status_anterior ? `${ev.status_anterior} → ` : ''}{ev.status_novo}
+                  </strong>
+                  {ev.observacao && <div className="at-secondary">{ev.observacao}</div>}
                   <div className="at-muted" style={{ fontSize: 'var(--at-text-xs)' }}>
                     {formatarData(ev.criado_em)}
                   </div>

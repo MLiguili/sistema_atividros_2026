@@ -81,7 +81,7 @@ const PedidoForm = ({
       }));
       setItens(itemInicialCalculadora ? [...baseItens, itemInicialCalculadora] : baseItens);
     } else {
-      setClienteId(clientes[0] ? String(clientes[0].id) : '');
+      setClienteId('');
       setPrazoEntrega('');
       setValidadeOrcamento('');
       setEnderecoEntrega('');
@@ -91,7 +91,12 @@ const PedidoForm = ({
       setObservacoes('');
       setItens(itemInicialCalculadora ? [itemInicialCalculadora] : []);
     }
-  }, [open, pedidoEdicao, itemInicialCalculadora, clientes]);
+  }, [open, pedidoEdicao, itemInicialCalculadora]);
+
+  useEffect(() => {
+    if (!open || pedidoEdicao) return;
+    setClienteId((atual) => atual || (clientes[0] ? String(clientes[0].id) : ''));
+  }, [open, pedidoEdicao, clientes]);
 
   const totais = calcularTotaisPreviewPedido(itens, frete, descontoValor, descontoTipo);
   const temItemAbaixo = itens.some((i) => Number(i.preco_unitario) < Number(i.valor_sugerido || 0));
