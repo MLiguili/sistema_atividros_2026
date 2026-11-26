@@ -15,7 +15,7 @@ aiosqlite = "^0.21.0"
 pydantic = {extras = ["email"], version = "^2.8.0"}
 pydantic-settings = "^2.8.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+passlib = "^1.7.4"
 python-multipart = "^0.0.20"
 alembic = "^1.14.0"
 fpdf2 = "^2.8.7"

@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+
 # === TABELA PREÇO VIDRO ===
 @pytest.mark.asyncio
 async def test_criar_preco_vidro(client: AsyncClient, cabecalho_autorizacao: dict):
@@ -19,7 +20,7 @@ async def test_criar_preco_vidro(client: AsyncClient, cabecalho_autorizacao: dic
 
 @pytest.mark.asyncio
 async def test_listar_tabela_vidro(client: AsyncClient, cabecalho_autorizacao: dict):
-    resposta = await client.get("/calculadora/tabela-vidro")
+    resposta = await client.get("/calculadora/tabela-vidro", headers=cabecalho_autorizacao)
     assert resposta.status_code == 200
     assert isinstance(resposta.json(), list)
 
@@ -34,7 +35,7 @@ async def test_atualizar_preco_vidro(client: AsyncClient, cabecalho_autorizacao:
         }
     )
     vidro_id = criar_resp.json()["id"]
-    
+
     resp_put = await client.put(
         f"/calculadora/tabela-vidro/{vidro_id}",
         headers=cabecalho_autorizacao,
@@ -53,7 +54,7 @@ async def test_preco_vidro_ja_existe(client: AsyncClient, cabecalho_autorizacao:
             "preco_por_m2": 120.0
         }
     )
-    
+
     resposta = await client.post(
         "/calculadora/tabela-vidro",
         headers=cabecalho_autorizacao,
@@ -80,7 +81,7 @@ async def test_criar_preco_paspatour(client: AsyncClient, cabecalho_autorizacao:
 
 @pytest.mark.asyncio
 async def test_listar_tabela_paspatour(client: AsyncClient, cabecalho_autorizacao: dict):
-    resposta = await client.get("/calculadora/tabela-paspatour")
+    resposta = await client.get("/calculadora/tabela-paspatour", headers=cabecalho_autorizacao)
     assert resposta.status_code == 200
     assert isinstance(resposta.json(), list)
 
@@ -95,7 +96,7 @@ async def test_atualizar_preco_paspatour(client: AsyncClient, cabecalho_autoriza
         }
     )
     paspatour_id = criar_resp.json()["id"]
-    
+
     resp_put = await client.put(
         f"/calculadora/tabela-paspatour/{paspatour_id}",
         headers=cabecalho_autorizacao,

@@ -14,17 +14,32 @@ from app.models.usuario import Usuario
 
 logger = logging.getLogger(__name__)
 
-contexto_senha = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+contexto_senha = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    deprecated="auto",
+    pbkdf2_sha256__default_rounds=29000,
+)
 esquema_oauth2 = OAuth2PasswordBearer(tokenUrl="autenticacao/entrar")
 
 
-def verificar_senha(senha_plana, senha_hash):
+def verificar_senha(senha_plana: str, senha_hash: str) -> bool:
+    """
+    Verifica se a senha em texto plano corresponde ao hash armazenado.
+    """
     return contexto_senha.verify(senha_plana, senha_hash)
 
-def obter_hash_senha(senha):
+
+def obter_hash_senha(senha: str) -> str:
+    """
+    Gera o hash seguro da senha utilizando pbkdf2_sha256.
+    """
     return contexto_senha.hash(senha)
 
-def criar_token_acesso(dados: dict, expira_delta: timedelta | None = None):
+
+def criar_token_acesso(dados: dict, expira_delta: timedelta | None = None) -> str:
+    """
+    Cria um token JWT assinado com tempo de expiração configurável.
+    """
     para_codificar = dados.copy()
     if expira_delta:
         expira = datetime.now(UTC) + expira_delta
@@ -34,7 +49,14 @@ def criar_token_acesso(dados: dict, expira_delta: timedelta | None = None):
     jwt_codificado = jwt.encode(para_codificar, settings.chave_secreta, algorithm=settings.algoritmo_jwt)
     return jwt_codificado
 
-async def obter_usuario_atual(token: str = Depends(esquema_oauth2), db: AsyncSession = Depends(obter_db)):
+
+async def obter_usuario_atual(
+    token: str = Depends(esquema_oauth2),
+    db: AsyncSession = Depends(obter_db),
+) -> Usuario:
+    """
+    Decodifica o token Bearer JWT e retorna o usuário autenticado no banco.
+    """
     excecao_credenciais = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não foi possível validar as credenciais",
@@ -42,7 +64,7 @@ async def obter_usuario_atual(token: str = Depends(esquema_oauth2), db: AsyncSes
     )
     try:
         payload = jwt.decode(token, settings.chave_secreta, algorithms=[settings.algoritmo_jwt])
-        nome_usuario: str = payload.get("sub")
+        nome_usuario: str | None = payload.get("sub")
         if nome_usuario is None:
             raise excecao_credenciais
     except JWTError:
