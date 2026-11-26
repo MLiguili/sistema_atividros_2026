@@ -1,24 +1,30 @@
+import os
 from collections.abc import AsyncGenerator
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
 
 from app.db.session import Base, configurar_pragmas_sqlite, obter_db
 from app.main import app
 from app.models.usuario import Usuario
 from app.services.autenticacao import criar_token_acesso, obter_hash_senha
 
-TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 
 
 @pytest.fixture(scope="session")
 async def engine():
     """
-    Cria engine SQLite em memória com PRAGMA foreign_keys=ON para toda a sessão de testes.
+    Cria engine assíncrono de teste (SQLite em memória ou PostgreSQL/asyncpg com NullPool por loop).
     """
-    engine_teste = create_async_engine(TEST_DATABASE_URL)
+    kwargs_engine = {}
+    if not TEST_DATABASE_URL.startswith("sqlite"):
+        kwargs_engine["poolclass"] = NullPool
+
+    engine_teste = create_async_engine(TEST_DATABASE_URL, **kwargs_engine)
     configurar_pragmas_sqlite(engine_teste)
     async with engine_teste.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

@@ -34,6 +34,7 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 source = ["app"]
+concurrency = ["greenlet", "thread"]
 omit = [
     "*/migrations/*",
     "*/tests/*",
@@ -43,7 +44,7 @@ omit = [
 [tool.coverage.report]
 show_missing = true
 skip_empty = true
-fail_under = 50
+fail_under = 80
 
 [tool.ruff]
 line-length = 120
