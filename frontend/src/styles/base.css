@@ -1,0 +1,91 @@
+/* ==========================================================================
+   BASE GLOBAL E ACESSIBILIDADE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--at-font-sans);
+  font-size: var(--at-font-base);
+  line-height: 1.5;
+  background-color: var(--at-color-bg-canvas);
+  color: var(--at-color-text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  color: var(--at-color-text-primary);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 { font-size: var(--at-font-3xl); }
+h2 { font-size: var(--at-font-xl); }
+h3 { font-size: var(--at-font-lg); }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--at-color-border-focus);
+  outline-offset: 2px;
+}
+
+.at-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.at-mono {
+  font-family: var(--at-font-mono);
+}
+
+.at-muted {
+  color: var(--at-color-text-muted);
+}
+
+.at-secondary {
+  color: var(--at-color-text-secondary);
+}
+
+.at-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  h1 { font-size: var(--at-font-2xl); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,380 +1,334 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Edit2, History, Mail, MapPin, Phone, Plus, Search, Trash2, Users } from 'lucide-react';
 import api from '../api/config';
-import { Plus, Search, User, Phone, Mail, MapPin, Edit2, Trash2, X, Save, AlertTriangle, History, ShoppingCart } from 'lucide-react';
+import { useToast } from '../context/ContextoToast';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import Field from '../components/ui/Field';
+import Dialog from '../components/ui/Dialog';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import Callout from '../components/ui/Callout';
+import EmptyState from '../components/ui/EmptyState';
+import ModalHistoricoCliente from '../components/clientes/ModalHistoricoCliente';
 
+const ESTADO_INICIAL_CLIENTE = {
+  nome: '',
+  sobrenome: '',
+  telefone: '',
+  email: '',
+  endereco: '',
+  cep: '',
+};
+
+/**
+ * Página de gestão de clientes com busca no servidor (?q=), CRUD acessível e histórico filtrado.
+ *
+ * @returns {JSX.Element} Página Clientes.
+ */
 const Clientes = () => {
+  const { notificar } = useToast();
   const [clientes, setClientes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [termoBusca, setTermoBusca] = useState('');
-  const [modalAberto, setModalAberto] = useState(null);
-  const [clienteEditando, setClienteEditando] = useState(null);
-  const [confirmDelete, setConfirmDelete] = useState(null);
-  const [erro, setErro] = useState('');
-  const [historicoCliente, setHistoricoCliente] = useState(null);
-  const [pedidosCliente, setPedidosCliente] = useState([]);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [form, setForm] = useState(ESTADO_INICIAL_CLIENTE);
+  const [editandoId, setEditandoId] = useState(null);
+  const [erroForm, setErroForm] = useState('');
+  const [salvando, setSalvando] = useState(false);
+  const [clienteExcluir, setClienteExcluir] = useState(null);
+  const [excluindo, setExcluindo] = useState(false);
+  const [clienteHistorico, setClienteHistorico] = useState(null);
 
-  const carregarClientes = async () => {
+  const carregarClientes = useCallback(async (busca = '') => {
     setCarregando(true);
     try {
-      const resposta = await api.get('/clientes/');
-      setClientes(resposta.data);
-    } catch (erro) {
-      console.error('Erro ao carregar clientes:', erro);
+      const params = busca.trim() ? { q: busca.trim() } : {};
+      const resp = await api.get('/clientes/', { params });
+      setClientes(resp.data || []);
+    } catch (err) {
+      notificar(err.response?.data?.detail || 'Erro ao carregar clientes.', 'danger');
+    } finally {
+      setCarregando(false);
     }
-    setCarregando(false);
-  };
+  }, [notificar]);
 
   useEffect(() => {
-    carregarClientes();
-  }, []);
+    const timer = setTimeout(() => {
+      carregarClientes(termoBusca);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [termoBusca, carregarClientes]);
 
-  const filtrados = clientes.filter(c => 
-    `${c.nome} ${c.sobrenome}`.toLowerCase().includes(termoBusca.toLowerCase()) ||
-    (c.email && c.email.toLowerCase().includes(termoBusca.toLowerCase())) ||
-    (c.telefone && c.telefone.includes(termoBusca))
-  );
-
-  const abrirModalCriar = () => {
-    setClienteEditando(null);
-    setErro('');
-    setModalAberto('criar');
+  const abrirCriar = () => {
+    setEditandoId(null);
+    setForm(ESTADO_INICIAL_CLIENTE);
+    setErroForm('');
+    setModalAberto(true);
   };
 
-  const abrirModalEditar = (cliente) => {
-    setClienteEditando(cliente);
-    setErro('');
-    setModalAberto('editar');
+  const abrirEditar = (cliente) => {
+    setEditandoId(cliente.id);
+    setForm({
+      nome: cliente.nome || '',
+      sobrenome: cliente.sobrenome || '',
+      telefone: cliente.telefone || '',
+      email: cliente.email || '',
+      endereco: cliente.endereco || '',
+      cep: cliente.cep || '',
+    });
+    setErroForm('');
+    setModalAberto(true);
   };
 
-  const fecharModal = () => {
-    setModalAberto(null);
-    setClienteEditando(null);
-    setErro('');
-  };
+  const handleSalvar = async (evento) => {
+    evento.preventDefault();
+    setErroForm('');
+    if (!form.nome.trim() || !form.sobrenome.trim() || !form.telefone.trim()) {
+      setErroForm('Nome, sobrenome e telefone são obrigatórios.');
+      return;
+    }
 
-  const handleSalvar = async (dados) => {
+    setSalvando(true);
     try {
-      if (clienteEditando) {
-        await api.put(`/clientes/${clienteEditando.id}`, dados);
+      if (editandoId) {
+        await api.put(`/clientes/${editandoId}`, form);
+        notificar('Cliente atualizado com sucesso.');
       } else {
-        await api.post('/clientes/', dados);
+        await api.post('/clientes/', form);
+        notificar('Cliente cadastrado com sucesso.');
       }
-      carregarClientes();
-      fecharModal();
+      setModalAberto(false);
+      carregarClientes(termoBusca);
     } catch (err) {
-      setErro(err.response?.data?.detail || 'Erro ao salvar');
+      setErroForm(err.response?.data?.detail || 'Erro ao salvar cliente.');
+    } finally {
+      setSalvando(false);
     }
   };
 
-  const handleDeletar = async (id) => {
+  const confirmarExclusao = async () => {
+    if (!clienteExcluir) return;
+    setExcluindo(true);
     try {
-      await api.delete(`/clientes/${id}`);
-      carregarClientes();
-      setConfirmDelete(null);
+      await api.delete(`/clientes/${clienteExcluir.id}`);
+      notificar('Cliente excluído com sucesso.');
+      setClienteExcluir(null);
+      carregarClientes(termoBusca);
     } catch (err) {
-      alert('Erro ao deletar: ' + (err.response?.data?.detail || err.message));
-    }
-  };
-
-  const abrirHistorico = async (cliente) => {
-    setHistoricoCliente(cliente);
-    try {
-      const resposta = await api.get('/pedidos/');
-      const pedidosDoCliente = resposta.data.filter(p => p.cliente_id === cliente.id);
-      setPedidosCliente(pedidosDoCliente.sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em)));
-    } catch (err) {
-      console.error('Erro ao carregar pedidos:', err);
-      setPedidosCliente([]);
+      notificar(err.response?.data?.detail || 'Não foi possível excluir o cliente.', 'danger');
+      setClienteExcluir(null);
+    } finally {
+      setExcluindo(false);
     }
   };
 
   return (
-    <div className="clientes-page fade-in">
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+    <div>
+      <header className="at-page-header">
         <div>
           <h1>Gestão de Clientes</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Visualize e gerencie sua base de contatos.</p>
+          <p className="at-page-header__subtitle">Cadastro central e histórico completo de orçamentos e pedidos.</p>
         </div>
-        <button className="btn btn-primary" onClick={abrirModalCriar}>
-          <Plus size={20} /> Adicionar Cliente
-        </button>
+        <div className="at-page-header__actions">
+          <Button variant="primary" onClick={abrirCriar}>
+            <Plus size={18} aria-hidden="true" />
+            <span>Adicionar Cliente</span>
+          </Button>
+        </div>
       </header>
 
-      <div className="card" style={{ marginBottom: '1.5rem', padding: '1rem', display: 'flex', gap: '1rem' }}>
-        <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
-          <input 
-            type="text" 
-            placeholder="Buscar por nome ou email..." 
-            className="input-control" 
-            style={{ paddingLeft: '40px' }}
+      <Card style={{ marginBottom: 'var(--at-space-4)' }}>
+        <div className="at-search-box">
+          <Search size={18} className="at-search-box__icon" aria-hidden="true" />
+          <label htmlFor="busca-clientes" className="at-sr-only">
+            Buscar clientes
+          </label>
+          <input
+            id="busca-clientes"
+            type="search"
+            className="at-input at-search-box__input"
+            placeholder="Nome, sobrenome, telefone ou e-mail"
             value={termoBusca}
             onChange={(e) => setTermoBusca(e.target.value)}
           />
         </div>
-      </div>
+      </Card>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-        {carregando ? (
-          <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '3rem' }}>Carregando clientes...</div>
-        ) : filtrados.length > 0 ? (
-          filtrados.map(c => (
-            <div key={c.id} className="card fade-in" style={{ padding: '1.25rem', position: 'relative' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(99, 102, 241, 0.1)', color: '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <User size={20} />
+      {carregando ? (
+        <div className="at-state" role="status">
+          Carregando clientes...
+        </div>
+      ) : clientes.length === 0 ? (
+        <Card>
+          <EmptyState
+            icon={<Users size={36} aria-hidden="true" />}
+            title={termoBusca ? 'Nenhum cliente encontrado para esta busca' : 'Nenhum cliente cadastrado'}
+            description={termoBusca ? 'Tente outro nome, telefone ou e-mail.' : 'Cadastre o primeiro cliente da Atividros.'}
+            action={
+              termoBusca ? (
+                <Button variant="secondary" onClick={() => setTermoBusca('')}>
+                  Limpar busca
+                </Button>
+              ) : (
+                <Button variant="primary" onClick={abrirCriar}>
+                  Novo Cliente
+                </Button>
+              )
+            }
+          />
+        </Card>
+      ) : (
+        <div className="at-grid-auto">
+          {clientes.map((c) => (
+            <Card key={c.id}>
+              <div className="at-card__header">
+                <div>
+                  <h3>
+                    {c.nome} {c.sobrenome}
+                  </h3>
+                  <span className="at-muted at-num">#{c.id}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  <button className="btn-icon" onClick={() => abrirModalEditar(c)} title="Editar">
-                    <Edit2 size={16} />
-                  </button>
-                  <button className="btn-icon" onClick={() => setConfirmDelete(c)} title="Excluir">
-                    <Trash2 size={16} color="var(--danger)" />
-                  </button>
+                <div style={{ display: 'flex', gap: 'var(--at-space-1)' }}>
+                  <Button
+                    variant="icon"
+                    onClick={() => setClienteHistorico(c)}
+                    aria-label={`Ver histórico de ${c.nome} ${c.sobrenome}`}
+                  >
+                    <History size={16} aria-hidden="true" />
+                  </Button>
+                  <Button
+                    variant="icon"
+                    onClick={() => abrirEditar(c)}
+                    aria-label={`Editar ${c.nome} ${c.sobrenome}`}
+                  >
+                    <Edit2 size={16} aria-hidden="true" />
+                  </Button>
+                  <Button
+                    variant="icon"
+                    onClick={() => setClienteExcluir(c)}
+                    aria-label={`Excluir ${c.nome} ${c.sobrenome}`}
+                  >
+                    <Trash2 size={16} aria-hidden="true" />
+                  </Button>
                 </div>
               </div>
-              
-              <h3 style={{ marginBottom: '1rem' }}>{c.nome} {c.sobrenome}</h3>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Phone size={14} /> {c.telefone || 'Sem telefone'}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Mail size={14} /> {c.email || 'Sem email'}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <MapPin size={14} /> {c.endereco ? (c.endereco.length > 30 ? c.endereco.substring(0, 30) + '...' : c.endereco) : 'Sem endereço'}
-                </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--at-space-2)' }}>
+                <p style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }} className="at-num">
+                  <Phone size={15} aria-hidden="true" /> {c.telefone}
+                </p>
+                {c.email && (
+                  <p style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }}>
+                    <Mail size={15} aria-hidden="true" /> {c.email}
+                  </p>
+                )}
+                {c.endereco && (
+                  <p style={{ display: 'flex', alignItems: 'center', gap: 'var(--at-space-2)' }} className="at-muted">
+                    <MapPin size={15} aria-hidden="true" /> {c.endereco} {c.cep ? `(${c.cep})` : ''}
+                  </p>
+                )}
               </div>
-
-              <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Cliente desde: {new Date(c.criado_em).toLocaleDateString('pt-BR')}</span>
-                <button className="btn btn-glass" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => abrirHistorico(c)}>
-                  <History size={14} /> Historico
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>Nenhum cliente encontrado.</div>
-        )}
-      </div>
-
-      <style>{`
-        .btn-icon { background: none; border: none; cursor: pointer; color: var(--text-secondary); transition: color 0.2s; }
-        .btn-icon:hover { color: var(--text-primary); }
-        .text-danger { color: var(--danger); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 2rem; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--glass-border); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
-      `}</style>
-
-      {modalAberto && (
-        <ModalCliente
-          cliente={clienteEditando}
-          onSalvar={handleSalvar}
-          onFechar={fecharModal}
-          erro={erro}
-        />
+            </Card>
+          ))}
+        </div>
       )}
 
-      {confirmDelete && (
-        <ModalConfirmacao
-          cliente={confirmDelete}
-          onConfirmar={() => handleDeletar(confirmDelete.id)}
-          onCancelar={() => setConfirmDelete(null)}
-        />
-      )}
+      <Dialog
+        open={modalAberto}
+        onClose={() => setModalAberto(false)}
+        title={editandoId ? 'Editar Cliente' : 'Novo Cliente'}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setModalAberto(false)} disabled={salvando}>
+              Cancelar
+            </Button>
+            <Button type="submit" form="form-cliente" variant="primary" loading={salvando}>
+              Salvar Cliente
+            </Button>
+          </>
+        }
+      >
+        <form id="form-cliente" onSubmit={handleSalvar}>
+          {erroForm && <Callout variant="danger">{erroForm}</Callout>}
+          <div className="at-grid-2">
+            <Field id="cli-nome" label="Nome" required>
+              <input
+                id="cli-nome"
+                className="at-input"
+                value={form.nome}
+                onChange={(e) => setForm({ ...form, nome: e.target.value })}
+                required
+              />
+            </Field>
+            <Field id="cli-sobrenome" label="Sobrenome" required>
+              <input
+                id="cli-sobrenome"
+                className="at-input"
+                value={form.sobrenome}
+                onChange={(e) => setForm({ ...form, sobrenome: e.target.value })}
+                required
+              />
+            </Field>
+          </div>
+          <div className="at-grid-2">
+            <Field id="cli-telefone" label="Telefone" required>
+              <input
+                id="cli-telefone"
+                className="at-input"
+                value={form.telefone}
+                onChange={(e) => setForm({ ...form, telefone: e.target.value })}
+                required
+              />
+            </Field>
+            <Field id="cli-email" label="E-mail">
+              <input
+                id="cli-email"
+                type="email"
+                className="at-input"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </Field>
+          </div>
+          <Field id="cli-endereco" label="Endereço">
+            <input
+              id="cli-endereco"
+              className="at-input"
+              value={form.endereco}
+              onChange={(e) => setForm({ ...form, endereco: e.target.value })}
+            />
+          </Field>
+          <Field id="cli-cep" label="CEP">
+            <input
+              id="cli-cep"
+              className="at-input"
+              value={form.cep}
+              onChange={(e) => setForm({ ...form, cep: e.target.value })}
+            />
+          </Field>
+        </form>
+      </Dialog>
 
-      {historicoCliente && (
-        <ModalHistorico
-          cliente={historicoCliente}
-          pedidos={pedidosCliente}
-          onFechar={() => { setHistoricoCliente(null); setPedidosCliente([]); }}
-        />
-      )}
+      <ConfirmDialog
+        open={Boolean(clienteExcluir)}
+        onClose={() => setClienteExcluir(null)}
+        onConfirm={confirmarExclusao}
+        title="Confirmar exclusão de cliente"
+        confirmLabel="Excluir cliente"
+        loading={excluindo}
+      >
+        <p>
+          Deseja excluir o cliente{' '}
+          <strong>
+            {clienteExcluir?.nome} {clienteExcluir?.sobrenome}
+          </strong>
+          ? Clientes com pedidos vinculados são protegidos contra exclusão.
+        </p>
+      </ConfirmDialog>
+
+      <ModalHistoricoCliente cliente={clienteHistorico} onClose={() => setClienteHistorico(null)} />
     </div>
   );
 };
-
-function ModalCliente({ cliente, onSalvar, onFechar, erro }) {
-  const [dados, setDados] = useState(cliente ? { ...cliente } : { nome: '', sobrenome: '', telefone: '', email: '', endereco: '', cep: '' });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSalvar(dados);
-  };
-
-  const setCampo = (campo, valor) => setDados({ ...dados, [campo]: valor });
-
-  return (
-    <div className="modal-overlay" onClick={onFechar}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>{cliente ? 'Editar Cliente' : 'Novo Cliente'}</h2>
-          <button className="btn-icon" onClick={onFechar}><X size={20} /></button>
-        </div>
-
-        {erro && (
-          <div style={{ background: 'rgba(239,68,68,0.1)', color: 'var(--danger)', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <AlertTriangle size={16} /> {erro}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Nome *</label>
-              <input type="text" className="input-control" value={dados.nome} onChange={e => setCampo('nome', e.target.value)} required />
-            </div>
-            <div className="form-group">
-              <label>Sobrenome *</label>
-              <input type="text" className="input-control" value={dados.sobrenome} onChange={e => setCampo('sobrenome', e.target.value)} required />
-            </div>
-            <div className="form-group">
-              <label>Telefone *</label>
-              <input type="text" className="input-control" value={dados.telefone} onChange={e => setCampo('telefone', e.target.value)} placeholder="(00) 00000-0000" required />
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input type="email" className="input-control" value={dados.email || ''} onChange={e => setCampo('email', e.target.value)} />
-            </div>
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-              <label>Endereço</label>
-              <input type="text" className="input-control" value={dados.endereco || ''} onChange={e => setCampo('endereco', e.target.value)} />
-            </div>
-            <div className="form-group">
-              <label>CEP</label>
-              <input type="text" className="input-control" value={dados.cep || ''} onChange={e => setCampo('cep', e.target.value)} placeholder="00000-000" />
-            </div>
-          </div>
-
-          <div className="modal-footer">
-            <button type="button" className="btn btn-glass" onClick={onFechar}>Cancelar</button>
-            <button type="submit" className="btn btn-primary"><Save size={18} /> Salvar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-function ModalConfirmacao({ cliente, onConfirmar, onCancelar }) {
-  return (
-    <div className="modal-overlay" onClick={onCancelar}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <AlertTriangle size={48} color="var(--danger)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ marginBottom: '1rem' }}>Confirmar Exclusão</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-            Tem certeza que deseja excluir <strong>{cliente.nome} {cliente.sobrenome}</strong>? Esta ação não pode ser desfeita.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-glass" onClick={onCancelar}>Cancelar</button>
-            <button className="btn" style={{ background: 'var(--danger)', color: 'white' }} onClick={onConfirmar}>
-              <Trash2 size={18} /> Excluir
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ModalHistorico({ cliente, pedidos, onFechar }) {
-  const getStatusBadge = (status, eixo) => {
-    const cores = {
-      geral: { rascunho: '#6b7280', confirmado: '#6366f1', cancelado: '#ef4444', entregue: '#22c55e', arquivado: '#9ca3af' },
-      producao: { pendente: '#f59e0b', aguardando_material: '#f97316', em_producao: '#8b5cf6', para_embalar: '#06b6d4', pronto_entrega: '#10b981', entregue: '#22c55e' },
-      financeiro: { sem_pagamento: '#ef4444', sinal_recebido: '#f59e0b', pago_total: '#22c55e', estornado: '#dc2626' }
-    };
-    const labels = {
-      geral: { rascunho: 'Rascunho', confirmado: 'Confirmado', cancelado: 'Cancelado', entregue: 'Entregue', arquivado: 'Arquivado' },
-      producao: { pendente: 'Pendente', aguardando_material: 'Aguard.', em_producao: 'Producao', para_embalar: 'Embalar', pronto_entrega: 'Pronto', entregue: 'Entregue' },
-      financeiro: { sem_pagamento: 'Sem Pgto', sinal_recebido: 'Sinal', pago_total: 'Pago', estornado: 'Estornado' }
-    };
-    return (
-      <span style={{ 
-        background: cores[eixo]?.[status] || '#6b7280', 
-        color: 'white', 
-        padding: '2px 6px', 
-        borderRadius: '10px', 
-        fontSize: '0.65rem',
-        fontWeight: 500
-      }}>
-        {labels[eixo]?.[status] || status}
-      </span>
-    );
-  };
-
-  const totalGasto = pedidos.reduce((acc, p) => acc + parseFloat(p.valor_total || 0), 0);
-
-  return (
-    <div className="modal-overlay" onClick={onFechar}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
-        <div className="modal-header">
-          <h2>Historico de {cliente.nome} {cliente.sobrenome}</h2>
-          <button className="btn-icon" onClick={onFechar}><X size={20} /></button>
-        </div>
-
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-          <div style={{ flex: 1, background: 'rgba(255,255,255,0.03)', padding: '0.75rem', borderRadius: '8px', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Pedidos</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{pedidos.length}</p>
-          </div>
-          <div style={{ flex: 1, background: 'rgba(255,255,255,0.03)', padding: '0.75rem', borderRadius: '8px', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Total Gasto</p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--accent-primary)' }}>R$ {totalGasto.toFixed(2)}</p>
-          </div>
-        </div>
-
-        {pedidos.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto' }}>
-            {pedidos.map(pedido => (
-              <div key={pedido.id} style={{ 
-                padding: '0.75rem', 
-                background: 'rgba(255,255,255,0.02)', 
-                borderRadius: '8px',
-                border: '1px solid var(--glass-border)'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                  <div>
-                    <p style={{ fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <ShoppingCart size={14} /> #{pedido.numero_pedido}
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      {new Date(pedido.criado_em).toLocaleDateString('pt-BR')}
-                    </p>
-                  </div>
-                  <span style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>
-                    R$ {parseFloat(pedido.valor_total || 0).toFixed(2)}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  {getStatusBadge(pedido.status_geral, 'geral')}
-                  {getStatusBadge(pedido.status_producao, 'producao')}
-                  {getStatusBadge(pedido.status_financeiro, 'financeiro')}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '2rem' }}>
-            Nenhum pedido encontrado para este cliente.
-          </div>
-        )}
-
-        <div className="modal-footer">
-          <button className="btn btn-glass" onClick={onFechar}>Fechar</button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default Clientes;

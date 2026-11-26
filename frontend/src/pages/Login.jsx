@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAutenticacao } from '../context/ContextoAutenticacao';
+import Card from '../components/ui/Card';
+import Field from '../components/ui/Field';
+import Button from '../components/ui/Button';
+import Callout from '../components/ui/Callout';
 
 /**
- * Página de autenticação do sistema Atividros.
- * Controla credenciais reais via estado React e exibe feedback acessível inline.
+ * Página de autenticação do sistema Atividros com estado controlado e feedback acessível.
  *
- * @returns {JSX.Element} Formulário de login ou redirecionamento para o painel.
+ * @returns {JSX.Element} Formulário de login ou redirecionamento para o Dashboard.
  */
 const Login = () => {
   const { usuario, login } = useAutenticacao();
@@ -25,9 +28,9 @@ const Login = () => {
   }
 
   /**
-   * Submete as credenciais informadas pelo usuário para autenticação.
+   * Submete as credenciais reais informadas no formulário para autenticação.
    *
-   * @param {React.FormEvent<HTMLFormElement>} evento Evento de envio do formulário.
+   * @param {React.FormEvent<HTMLFormElement>} evento Evento de submit.
    * @returns {Promise<void>}
    */
   const handleSubmit = async (evento) => {
@@ -47,7 +50,7 @@ const Login = () => {
     } catch (err) {
       if (err.response?.status === 401) {
         setErro('Usuário ou senha inválidos.');
-      } else if (err.response?.status === 400) {
+      } else if (err.response?.status === 400 || err.response?.status === 403) {
         setErro(err.response?.data?.detail || 'Usuário inativo.');
       } else {
         setErro('Não foi possível conectar ao servidor. Tente novamente.');
@@ -58,50 +61,30 @@ const Login = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '1rem' }}>
-      <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Atividros Login</h2>
+    <main className="at-login-page">
+      <Card className="at-login-card">
+        <div style={{ textAlign: 'center', marginBottom: 'var(--at-space-5)' }}>
+          <h1 style={{ fontSize: 'var(--at-font-2xl)' }}>Atividros</h1>
+          <p className="at-muted">Acesse com seu usuário e senha internos</p>
+        </div>
 
         {sessaoExpirada && (
-          <div
-            role="status"
-            style={{
-              marginBottom: '1rem',
-              padding: '0.75rem 1rem',
-              borderRadius: '8px',
-              background: 'rgba(245, 158, 11, 0.15)',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
-              color: '#fcd34d',
-              fontSize: '0.875rem',
-            }}
-          >
+          <Callout variant="warning" role="status">
             Sua sessão expirou. Faça login novamente para continuar.
-          </div>
+          </Callout>
         )}
 
         {erro && (
-          <div
-            role="alert"
-            style={{
-              marginBottom: '1rem',
-              padding: '0.75rem 1rem',
-              borderRadius: '8px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
-              color: '#fca5a5',
-              fontSize: '0.875rem',
-            }}
-          >
+          <Callout variant="danger" role="alert">
             {erro}
-          </div>
+          </Callout>
         )}
 
         <form onSubmit={handleSubmit} noValidate>
-          <div className="form-group">
-            <label htmlFor="login-usuario">Usuário</label>
+          <Field id="login-usuario" label="Usuário" required>
             <input
               id="login-usuario"
-              className="input-control"
+              className="at-input"
               type="text"
               autoComplete="username"
               required
@@ -110,12 +93,12 @@ const Login = () => {
               placeholder="Digite seu usuário"
               disabled={enviando}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-senha">Senha</label>
+          </Field>
+
+          <Field id="login-senha" label="Senha" required>
             <input
               id="login-senha"
-              className="input-control"
+              className="at-input"
               type="password"
               autoComplete="current-password"
               required
@@ -124,13 +107,14 @@ const Login = () => {
               placeholder="Digite sua senha"
               disabled={enviando}
             />
-          </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={enviando}>
+          </Field>
+
+          <Button type="submit" variant="primary" loading={enviando} style={{ width: '100%' }}>
             {enviando ? 'Entrando...' : 'Entrar'}
-          </button>
+          </Button>
         </form>
-      </div>
-    </div>
+      </Card>
+    </main>
   );
 };
 

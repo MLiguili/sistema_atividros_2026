@@ -1,0 +1,39 @@
+/* ==========================================================================
+   ESTILOS DE ESTOQUE, CHAPAS M² E TABELAS DE PREÇO
+   ========================================================================== */
+
+.at-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--at-space-3);
+  margin-bottom: var(--at-space-4);
+  flex-wrap: wrap;
+}
+
+.at-search-box {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.at-search-box__icon {
+  position: absolute;
+  left: var(--at-space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--at-color-text-muted);
+  pointer-events: none;
+}
+
+.at-search-box__input {
+  padding-left: 40px;
+}
+
+.at-custo-helper {
+  margin-top: var(--at-space-2);
+  padding: var(--at-space-3);
+  background-color: var(--at-color-bg-subtle);
+  border: 1px solid var(--at-color-border-subtle);
+  border-radius: var(--at-radius-md);
+}
