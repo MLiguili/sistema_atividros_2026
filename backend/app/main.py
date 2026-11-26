@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import autenticacao, calculadora, clientes, estoque, pedidos
+from app.api import autenticacao, calculadora, clientes, dashboard, estoque, pedidos
 from app.config import settings
 
 logging.basicConfig(
@@ -50,6 +50,7 @@ app.include_router(estoque.router)
 app.include_router(clientes.router)
 app.include_router(pedidos.router)
 app.include_router(calculadora.router)
+app.include_router(dashboard.router)
 
 app.add_middleware(
     CORSMiddleware,

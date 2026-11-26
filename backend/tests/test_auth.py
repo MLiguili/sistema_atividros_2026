@@ -1,8 +1,10 @@
 import pytest
 from httpx import AsyncClient
-from app.services.autenticacao import obter_hash_senha
-from app.models.usuario import Usuario
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.usuario import Usuario
+from app.services.autenticacao import obter_hash_senha
+
 
 @pytest.mark.asyncio
 async def test_login_sucesso(client: AsyncClient, db_session: AsyncSession):
