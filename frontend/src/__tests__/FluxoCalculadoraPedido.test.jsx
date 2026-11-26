@@ -49,6 +49,9 @@ describe('Fluxo Calculadora -> PedidoForm com alerta de preço abaixo do sugerid
       </MemoryRouter>,
     );
 
+    expect(screen.queryByLabelText(/chapa física no estoque/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/chapa de fundo no estoque/i)).not.toBeInTheDocument();
+
     await user.click(screen.getByRole('button', { name: /calcular orçamento/i }));
     expect(await screen.findByText(/unitário sugerido:/i)).toBeInTheDocument();
 

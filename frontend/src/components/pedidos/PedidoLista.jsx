@@ -40,7 +40,7 @@ const PedidoLista = ({
   const columns = [
     {
       key: 'numero',
-      label: 'Pedido',
+      header: 'Pedido',
       render: (row) => (
         <div>
           <strong className="at-num">{row.numero_pedido}</strong>
@@ -52,7 +52,7 @@ const PedidoLista = ({
     },
     {
       key: 'cliente',
-      label: 'Cliente',
+      header: 'Cliente',
       render: (row) => (
         <div>
           <div>{row.cliente?.nome || `Cliente #${row.cliente_id}`}</div>
@@ -66,7 +66,7 @@ const PedidoLista = ({
     },
     {
       key: 'status',
-      label: 'Status (3 Eixos)',
+      header: 'Status (3 Eixos)',
       render: (row) => (
         <div className="at-actions">
           <StatusBadge eixo="geral" status={row.status_geral} />
@@ -77,8 +77,7 @@ const PedidoLista = ({
     },
     {
       key: 'valores',
-      label: 'Total / Saldo',
-      align: 'right',
+      header: 'Total / Saldo',
       numeric: true,
       render: (row) => (
         <div>
@@ -91,8 +90,7 @@ const PedidoLista = ({
     },
     {
       key: 'acoes',
-      label: 'Ações',
-      align: 'right',
+      header: 'Ações',
       render: (row) => (
         <div className="at-actions" style={{ justifyContent: 'flex-end' }}>
           <Button variant="ghost" size="sm" onClick={() => onAbrirDetalhe(row)}>
@@ -128,7 +126,7 @@ const PedidoLista = ({
 
       <DataTable
         columns={columns}
-        rows={filtrados}
+        data={filtrados}
         emptyTitle="Nenhum pedido encontrado"
         emptyDescription="Ajuste o filtro ou crie um novo orçamento/pedido."
       />

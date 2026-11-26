@@ -3,6 +3,7 @@ import { Calculator, Plus, Trash2 } from 'lucide-react';
 import Card from '../ui/Card';
 import Field from '../ui/Field';
 import Button from '../ui/Button';
+import { descreverDisponibilidadeMaterial, resolverEstoquePorTipo } from '../../utils/formatadores';
 
 /**
  * Formulário reutilizável de composição técnica para Quadro Sob Medida e Vidro/Espelho Avulso.
@@ -202,13 +203,26 @@ const FormComposicaoQuadro = ({
 
       <Card>
         <h3 style={{ marginBottom: 'var(--at-space-3)' }}>Vidro, Fundo e Mão de Obra</h3>
-        <div className="at-grid-2">
-          <Field id="calc-vidro-tipo" label="Tabela de Preço — Vidro / Espelho" required={modo === 'vidro_avulso'}>
+        <div className={modo === 'quadro_sob_medida' ? 'at-grid-2' : undefined}>
+          <Field
+            id="calc-vidro-tipo"
+            label="Vidro / Espelho"
+            hint={descreverDisponibilidadeMaterial(catalogos.vidros, dados.vidro_tipo)}
+            required={modo === 'vidro_avulso'}
+          >
             <select
               id="calc-vidro-tipo"
               className="at-input"
               value={dados.vidro_tipo}
-              onChange={(e) => onChangeDados({ ...dados, vidro_tipo: e.target.value })}
+              onChange={(e) => {
+                const novoTipo = e.target.value;
+                const chapa = resolverEstoquePorTipo(catalogos.vidros, novoTipo);
+                onChangeDados({
+                  ...dados,
+                  vidro_tipo: novoTipo,
+                  vidro_id: chapa ? String(chapa.id) : '',
+                });
+              }}
             >
               {modo === 'quadro_sob_medida' && <option value="">Sem vidro</option>}
               {catalogos.tabelaVidro.map((tv) => (
@@ -219,31 +233,25 @@ const FormComposicaoQuadro = ({
             </select>
           </Field>
 
-          <Field id="calc-vidro-id" label="Chapa física no Estoque (para baixa)">
-            <select
-              id="calc-vidro-id"
-              className="at-input"
-              value={dados.vidro_id}
-              onChange={(e) => onChangeDados({ ...dados, vidro_id: e.target.value })}
+          {modo === 'quadro_sob_medida' && (
+            <Field
+              id="calc-fundo-tipo"
+              label="Fundo"
+              hint={descreverDisponibilidadeMaterial(catalogos.fundos, dados.fundo_tipo)}
             >
-              <option value="">Sob encomenda / Sem vínculo físico</option>
-              {catalogos.vidros.map((v) => (
-                <option key={v.id} value={v.id}>
-                  {v.tipo} {v.espessura}mm ({Number(v.area_disponivel_m2).toFixed(4)} m²)
-                </option>
-              ))}
-            </select>
-          </Field>
-        </div>
-
-        {modo === 'quadro_sob_medida' && (
-          <div className="at-grid-2">
-            <Field id="calc-fundo-tipo" label="Tabela de Preço — Fundo">
               <select
                 id="calc-fundo-tipo"
                 className="at-input"
                 value={dados.fundo_tipo}
-                onChange={(e) => onChangeDados({ ...dados, fundo_tipo: e.target.value })}
+                onChange={(e) => {
+                  const novoTipo = e.target.value;
+                  const chapa = resolverEstoquePorTipo(catalogos.fundos, novoTipo);
+                  onChangeDados({
+                    ...dados,
+                    fundo_tipo: novoTipo,
+                    fundo_id: chapa ? String(chapa.id) : '',
+                  });
+                }}
               >
                 <option value="">Sem fundo</option>
                 {catalogos.tabelaFundo.map((tf) => (
@@ -253,24 +261,8 @@ const FormComposicaoQuadro = ({
                 ))}
               </select>
             </Field>
-
-            <Field id="calc-fundo-id" label="Chapa de Fundo no Estoque (para baixa)">
-              <select
-                id="calc-fundo-id"
-                className="at-input"
-                value={dados.fundo_id}
-                onChange={(e) => onChangeDados({ ...dados, fundo_id: e.target.value })}
-              >
-                <option value="">Sob encomenda / Sem vínculo físico</option>
-                {catalogos.fundos.map((f) => (
-                  <option key={f.id} value={f.id}>
-                    {f.tipo} {f.espessura}mm ({Number(f.area_disponivel_m2).toFixed(4)} m²)
-                  </option>
-                ))}
-              </select>
-            </Field>
-          </div>
-        )}
+          )}
+        </div>
 
         <Field
           id="calc-mao-obra"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../api/config';
 import Dialog from '../ui/Dialog';
 import Button from '../ui/Button';
@@ -6,6 +6,7 @@ import Field from '../ui/Field';
 import Callout from '../ui/Callout';
 import FormComposicaoQuadro from '../calculadora/FormComposicaoQuadro';
 import PainelResultadoCalculo from '../calculadora/PainelResultadoCalculo';
+import { resolverEstoquePorTipo } from '../../utils/formatadores';
 
 const DADOS_INICIAIS = {
   obra_largura: '50',
@@ -48,6 +49,22 @@ const ModalAdicionarItemPedido = ({ open, onClose, catalogos, onAdicionarItem })
   });
   const [erro, setErro] = useState('');
   const [calculando, setCalculando] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    setDados((atual) => {
+      const vidroTipoIni = atual.vidro_tipo || catalogos.tabelaVidro?.[0]?.tipo || '';
+      const chapaVidro = resolverEstoquePorTipo(catalogos.vidros || [], vidroTipoIni);
+      const fundoChapa = resolverEstoquePorTipo(catalogos.fundos || [], atual.fundo_tipo);
+      return {
+        ...atual,
+        vidro_tipo: vidroTipoIni,
+        vidro_id: atual.vidro_id || (chapaVidro ? String(chapaVidro.id) : ''),
+        fundo_id: atual.fundo_id || (fundoChapa ? String(fundoChapa.id) : ''),
+        paspatour_id: atual.paspatour_id || (catalogos.tabelaPaspatour?.[0] ? String(catalogos.tabelaPaspatour[0].id) : ''),
+      };
+    });
+  }, [open, catalogos]);
 
   const calcular = async () => {
     setErro('');

@@ -104,3 +104,44 @@ export const calcularTotaisPreviewPedido = (itens = [], frete = 0, descontoValor
     valorTotal,
   };
 };
+
+/**
+ * Localiza automaticamente a chapa física em estoque associada a um tipo de vidro ou fundo.
+ *
+ * @param {Array<{ id: number, tipo: string, espessura?: number | string, area_disponivel_m2?: number | string }>} listaEstoque Lista de vidros ou fundos do estoque.
+ * @param {string | null | undefined} tipoSelecionado Tipo selecionado na tabela de preços.
+ * @returns {object | null} Chapa correspondente prioritariamente com maior saldo em m², ou null se ausente.
+ */
+export const resolverEstoquePorTipo = (listaEstoque = [], tipoSelecionado = '') => {
+  const tipoNorm = String(tipoSelecionado || '').trim().toLowerCase();
+  if (!tipoNorm) return null;
+
+  const correspondentes = (listaEstoque || []).filter(
+    (item) => String(item.tipo || '').trim().toLowerCase() === tipoNorm,
+  );
+  if (correspondentes.length === 0) return null;
+
+  return [...correspondentes].sort(
+    (a, b) => Number(b.area_disponivel_m2 || 0) - Number(a.area_disponivel_m2 || 0),
+  )[0];
+};
+
+/**
+ * Gera texto orientativo de estoque e necessidade de compra para vidro ou fundo selecionado.
+ *
+ * @param {Array<object>} listaEstoque Lista de vidros ou fundos do estoque.
+ * @param {string | null | undefined} tipoSelecionado Tipo escolhido.
+ * @returns {string} Dica contextual de baixa ou compra.
+ */
+export const descreverDisponibilidadeMaterial = (listaEstoque = [], tipoSelecionado = '') => {
+  if (!tipoSelecionado) return 'Nenhum material selecionado.';
+  const chapa = resolverEstoquePorTipo(listaEstoque, tipoSelecionado);
+  if (!chapa) {
+    return 'Material não cadastrado no estoque — precisa ser comprado ao produzir.';
+  }
+  const saldo = Number(chapa.area_disponivel_m2 || 0);
+  if (saldo <= 0) {
+    return `Estoque zerado/negativo (${formatarAreaM2(saldo)}) — precisa ser comprado.`;
+  }
+  return `Baixa automática no estoque: ${chapa.tipo} ${chapa.espessura}mm (${formatarAreaM2(saldo)} disponíveis).`;
+};

@@ -78,8 +78,14 @@ const Pedidos = () => {
       setPedidoEdicao(null);
       setFormAberto(true);
       navigate('/pedidos', { replace: true, state: {} });
+    } else if (location.state?.abrirPedidoId && !carregando) {
+      const idAlvo = location.state.abrirPedidoId;
+      const encontrado = pedidos.find((p) => p.id === idAlvo);
+      if (encontrado) setPedidoDetalhe(encontrado);
+      else api.get(`/pedidos/${idAlvo}`).then((r) => setPedidoDetalhe(r.data)).catch(() => {});
+      navigate('/pedidos', { replace: true, state: {} });
     }
-  }, [location.state, navigate]);
+  }, [location.state, navigate, pedidos, carregando]);
 
   const sincronizarPedido = (atualizado) => {
     setPedidos((lista) => (lista.some((p) => p.id === atualizado.id) ? lista.map((p) => (p.id === atualizado.id ? atualizado : p)) : [atualizado, ...lista]));

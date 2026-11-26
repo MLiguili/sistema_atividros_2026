@@ -256,6 +256,7 @@ class RespostaPrevisaoBaixa(BaseModel):
     molduras: list[PrevisaoMoldura]
     vidros: list[PrevisaoArea]
     fundos: list[PrevisaoArea]
+    materiais_para_compra: list[str] = Field(default_factory=list)
 
 
 class MaterialBaixado(BaseModel):

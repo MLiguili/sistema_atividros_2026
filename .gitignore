@@ -209,6 +209,10 @@ __marimo__/
 # IDE, bancos locais e build do frontend
 .idea/
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 *.sqlite3
 frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
