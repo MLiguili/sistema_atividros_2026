@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAutenticacao } from '../context/ContextoAutenticacao';
 import Button from './ui/Button';
+import LogoAtividros from './ui/LogoAtividros';
 
 /**
  * Item de navegação lateral com fechamento automático do drawer mobile.
@@ -68,7 +69,7 @@ const Layout = ({ children }) => {
         >
           {menuAberto ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
         </Button>
-        <span className="at-brand">ATIVIDROS</span>
+        <LogoAtividros compact subtitle="" />
         <div style={{ width: '44px' }} aria-hidden="true" />
       </header>
 
@@ -76,8 +77,7 @@ const Layout = ({ children }) => {
 
       <aside id="at-sidebar-nav" className={`at-sidebar ${menuAberto ? 'at-sidebar--open' : ''}`.trim()}>
         <div className="at-sidebar__header">
-          <span className="at-brand">ATIVIDROS</span>
-          <span className="at-brand-sub">Sistema de Gestão V1.0</span>
+          <LogoAtividros subtitle="Molduras & Vidros" />
         </div>
 
         <nav className="at-sidebar__nav" aria-label="Menu principal">

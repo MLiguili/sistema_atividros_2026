@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LAYOUT DUAL: BALCÃO DESKTOP + OFICINA MOBILE/TABLET
+   LAYOUT DUAL: BALCÃO DESKTOP + OFICINA MOBILE/TABLET + IDENTIDADE ATIVIDROS
    ========================================================================== */
 
 .at-app {
@@ -23,20 +23,77 @@
   z-index: var(--at-z-sidebar);
 }
 
-.at-brand {
-  color: var(--at-color-text-brand);
+/* Logotipo oficial das 6 molduras entrelaçadas */
+.at-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--at-space-3);
+  text-decoration: none;
+}
+
+.at-logo--centered {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: var(--at-space-2);
+}
+
+.at-logo__mark {
+  width: 48px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.at-logo--compact .at-logo__mark {
+  width: 36px;
+  height: 28px;
+}
+
+.at-logo--centered .at-logo__mark {
+  width: 72px;
+  height: 52px;
+}
+
+.at-logo__wordmark-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.at-logo__wordmark {
+  font-family: var(--at-font-script);
+  font-size: 1.95rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: var(--at-font-lg);
+  color: var(--at-color-text-primary);
+  letter-spacing: -0.01em;
 }
 
-.at-brand-sub {
-  font-size: var(--at-font-xs);
+.at-logo--compact .at-logo__wordmark {
+  font-size: 1.55rem;
+}
+
+.at-logo--centered .at-logo__wordmark {
+  font-size: 2.35rem;
+}
+
+.at-logo__sub {
+  font-family: var(--at-font-sans);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
   color: var(--at-color-text-muted);
-  display: block;
-  margin-top: 2px;
 }
 
+.at-logo__frame-bronze    { stroke: var(--at-brand-bronze); }
+.at-logo__frame-champagne { stroke: var(--at-brand-champagne); }
+.at-logo__frame-champ-in  { stroke: var(--at-brand-champ-soft); }
+.at-logo__frame-gold      { stroke: var(--at-brand-gold); }
+.at-logo__frame-gold-in   { stroke: var(--at-brand-gold-soft); }
+.at-logo__frame-lilac     { stroke: var(--at-brand-lilac); }
+.at-logo__frame-sky       { stroke: var(--at-brand-sky); }
+
+/* Sidebar */
 .at-sidebar {
   width: var(--at-size-sidebar);
   background-color: var(--at-color-bg-sidebar);
@@ -54,7 +111,7 @@
 
 .at-sidebar__header {
   padding-bottom: var(--at-space-5);
-  margin-bottom: var(--at-space-5);
+  margin-bottom: var(--at-space-4);
   border-bottom: 1px solid var(--at-color-border-subtle);
 }
 
@@ -69,9 +126,9 @@
   display: flex;
   align-items: center;
   gap: var(--at-space-3);
-  padding: 0 var(--at-space-3);
+  padding: 0 var(--at-space-4);
   min-height: 44px;
-  border-radius: var(--at-radius-md);
+  border-radius: var(--at-radius-pill);
   color: var(--at-color-text-secondary);
   font-weight: 500;
   font-size: var(--at-font-base);
@@ -80,14 +137,15 @@
 }
 
 .at-nav-link:hover {
-  background-color: var(--at-color-bg-hover);
+  background-color: var(--at-color-bg-subtle);
   color: var(--at-color-text-primary);
 }
 
 .at-nav-link.active {
-  background-color: var(--at-color-feedback-success-bg);
-  color: var(--at-color-text-brand);
-  border-color: var(--at-color-feedback-success-border);
+  background-color: var(--at-color-bg-ice);
+  color: var(--at-color-text-primary);
+  font-weight: 600;
+  border-color: var(--at-color-border-strong);
 }
 
 .at-sidebar__footer {
@@ -105,11 +163,13 @@
 }
 
 .at-user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--at-radius-pill);
-  background-color: var(--at-color-action-primary-bg);
-  color: var(--at-color-action-primary-fg);
+  background-color: var(--at-color-bg-ice);
+  color: var(--at-color-text-primary);
+  border: 2px solid var(--at-color-bg-surface);
+  box-shadow: var(--at-shadow-sm);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -138,7 +198,7 @@
 .at-main {
   flex: 1;
   margin-left: var(--at-size-sidebar);
-  padding: var(--at-space-6);
+  padding: var(--at-space-6) var(--at-space-8);
   min-width: 0;
 }
 
@@ -151,7 +211,7 @@
 .at-page-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: var(--at-space-4);
   margin-bottom: var(--at-space-6);
   flex-wrap: wrap;
@@ -190,23 +250,61 @@
 
 .at-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--at-space-4);
   margin-bottom: var(--at-space-6);
 }
 
+/* Login com círculos suaves em #DCF0F2 inspirados no Hero do mockup */
 .at-login-page {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--at-space-4);
-  background-color: var(--at-color-bg-canvas);
+  background-color: var(--at-color-bg-surface);
+}
+
+.at-login-orb {
+  position: absolute;
+  border-radius: var(--at-radius-pill);
+  background-color: var(--at-color-bg-ice);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.at-login-orb--tr {
+  width: 460px;
+  height: 460px;
+  top: -150px;
+  right: -130px;
+}
+
+.at-login-orb--bl {
+  width: 300px;
+  height: 300px;
+  bottom: -90px;
+  left: -90px;
 }
 
 .at-login-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 420px;
+  max-width: 430px;
+  padding: var(--at-space-8);
+  box-shadow: var(--at-shadow-md);
+}
+
+.at-login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--at-space-2);
+  text-align: center;
+  margin-bottom: var(--at-space-6);
 }
 
 @media (max-width: 1023px) {
@@ -231,9 +329,16 @@
   .at-grid-3 {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .at-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 767px) {
+  .at-stats-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .at-main {
     padding: calc(var(--at-size-mobile-header) + var(--at-space-3)) var(--at-space-3) var(--at-space-6);
   }

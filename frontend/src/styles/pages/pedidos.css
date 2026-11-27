@@ -11,10 +11,10 @@
 }
 
 .at-kanban__col {
-  flex: 0 0 272px;
+  flex: 0 0 280px;
   background-color: var(--at-color-bg-subtle);
   border: 1px solid var(--at-color-border-subtle);
-  border-radius: var(--at-radius-lg);
+  border-radius: var(--at-radius-xl);
   padding: var(--at-space-3);
   display: flex;
   flex-direction: column;
@@ -26,13 +26,13 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: var(--at-space-2);
-  border-bottom: 2px solid var(--at-color-border-strong);
+  border-bottom: 1px solid var(--at-color-border-strong);
 }
 
 .at-kanban__cards {
   display: flex;
   flex-direction: column;
-  gap: var(--at-space-2);
+  gap: var(--at-space-3);
 }
 
 .at-kanban-mobile-tabs {
@@ -46,15 +46,18 @@
 .at-pedido-card {
   background-color: var(--at-color-bg-surface);
   border: 1px solid var(--at-color-border-subtle);
-  border-radius: var(--at-radius-md);
-  padding: var(--at-space-3);
+  border-radius: var(--at-radius-lg);
+  padding: var(--at-space-4);
   display: flex;
   flex-direction: column;
   gap: var(--at-space-2);
+  box-shadow: var(--at-shadow-sm);
+  transition: border-color var(--at-duration-fast) ease, box-shadow var(--at-duration-fast) ease;
 }
 
 .at-pedido-card:hover {
   border-color: var(--at-color-border-strong);
+  box-shadow: var(--at-shadow-md);
 }
 
 .at-pedido-card__top,
@@ -72,7 +75,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--at-space-3);
-  padding: var(--at-space-3);
+  padding: var(--at-space-3) var(--at-space-4);
   border: 1px solid var(--at-color-border-subtle);
   border-radius: var(--at-radius-md);
   background-color: var(--at-color-bg-surface);
@@ -95,10 +98,14 @@
   min-height: 44px;
   border-radius: var(--at-radius-md);
   border: 1px solid var(--at-color-border-strong);
-  background-color: var(--at-color-bg-elevated);
+  background-color: var(--at-color-bg-surface);
   color: var(--at-color-text-primary);
   font-weight: 700;
   cursor: pointer;
+}
+
+.at-stepper__btn:hover {
+  background-color: var(--at-color-bg-subtle);
 }
 
 .at-stepper__input {
@@ -113,7 +120,7 @@
 }
 
 .at-timeline__item {
-  border-left: 2px solid var(--at-color-border-strong);
+  border-left: 1px solid var(--at-color-border-strong);
   padding-left: var(--at-space-3);
   padding-bottom: var(--at-space-2);
 }
