@@ -11,24 +11,25 @@
 
 .at-calc-result-total {
   text-align: center;
-  padding: var(--at-space-4);
-  background-color: var(--at-color-bg-subtle);
+  padding: var(--at-space-5);
+  background-color: var(--at-color-bg-ice);
   border: 1px solid var(--at-color-border-subtle);
-  border-radius: var(--at-radius-md);
+  border-radius: var(--at-radius-lg);
   margin-bottom: var(--at-space-4);
 }
 
 .at-calc-result-total__valor {
+  font-family: var(--at-font-serif);
   font-size: var(--at-font-3xl);
   font-weight: 700;
-  color: var(--at-color-text-brand);
+  color: var(--at-color-text-primary);
 }
 
 .at-calc-list {
   display: flex;
   flex-direction: column;
   gap: var(--at-space-2);
-  padding: var(--at-space-3);
+  padding: var(--at-space-3) var(--at-space-4);
   background-color: var(--at-color-bg-subtle);
   border: 1px solid var(--at-color-border-subtle);
   border-radius: var(--at-radius-md);
@@ -43,7 +44,7 @@
 
 .at-calc-list__row--total {
   padding-top: var(--at-space-2);
-  border-top: 1px solid var(--at-color-border-subtle);
+  border-top: 1px solid var(--at-color-border-strong);
   font-weight: 700;
 }
 

@@ -12,22 +12,40 @@
 
 html {
   font-size: 16px;
+  scrollbar-color: var(--at-color-border-strong) var(--at-color-bg-canvas);
+  scrollbar-width: thin;
 }
 
 body {
   font-family: var(--at-font-sans);
   font-size: var(--at-font-base);
-  line-height: 1.5;
+  line-height: 1.55;
   background-color: var(--at-color-bg-canvas);
   color: var(--at-color-text-primary);
+  caret-color: var(--at-color-text-primary);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+::selection {
+  background-color: var(--at-color-bg-ice);
+  color: var(--at-color-text-primary);
+}
+
+h1, h2 {
+  font-family: var(--at-font-serif);
   color: var(--at-color-text-primary);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h3, h4 {
+  font-family: var(--at-font-sans);
+  color: var(--at-color-text-primary);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 h1 { font-size: var(--at-font-3xl); }

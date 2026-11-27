@@ -5,6 +5,7 @@ import Card from '../components/ui/Card';
 import Field from '../components/ui/Field';
 import Button from '../components/ui/Button';
 import Callout from '../components/ui/Callout';
+import LogoAtividros from '../components/ui/LogoAtividros';
 
 /**
  * Página de autenticação do sistema Atividros com estado controlado e feedback acessível.
@@ -62,9 +63,11 @@ const Login = () => {
 
   return (
     <main className="at-login-page">
+      <div className="at-login-orb at-login-orb--tr" aria-hidden="true" />
+      <div className="at-login-orb at-login-orb--bl" aria-hidden="true" />
       <Card className="at-login-card">
-        <div style={{ textAlign: 'center', marginBottom: 'var(--at-space-5)' }}>
-          <h1 style={{ fontSize: 'var(--at-font-2xl)' }}>Atividros</h1>
+        <div className="at-login-brand">
+          <LogoAtividros centered asHeading subtitle="Molduras & Vidros" />
           <p className="at-muted">Acesse com seu usuário e senha internos</p>
         </div>
 
